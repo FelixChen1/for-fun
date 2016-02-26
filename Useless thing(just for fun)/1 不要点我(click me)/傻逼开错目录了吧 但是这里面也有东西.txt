@@ -1,0 +1,5 @@
+document.write("SB")
+System.out.println("SB");
+echo "SB"
+printf("SB");
+print("SB");
