@@ -10,6 +10,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "Hello world!" << endl;
 	cout << "Hello world, again!" << endl;
+	cout << "Hello world, again and again!" << endl;
 	return 0;
 }
 
