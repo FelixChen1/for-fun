@@ -10,7 +10,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "Hello world!" << endl;
 	cout << "Hello Git!" << endl;
-	cout << "Hello Bill!" << endl;
+	cout << "Hello RMAD world!" << endl;
 	return 0;
 }
 
