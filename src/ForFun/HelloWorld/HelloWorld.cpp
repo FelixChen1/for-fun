@@ -11,6 +11,7 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "Hello world!" << endl;
 	cout << "Hello world, again!" << endl;
+	cout << "Hello world, again and again!" << endl;
 	ObjTwo *ot = new ObjTwo();
 	ot->m_iCount = 199;
 	ot->m_cSymbol = 'q';
