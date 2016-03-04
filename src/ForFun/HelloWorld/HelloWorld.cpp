@@ -10,6 +10,10 @@ using namespace LeoLibrary;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "Hello world!" << endl;
+	cout << "Hello Git!" << endl;
+	cout << "Hello RMAD world!" << endl;
+	cout << "Welcome to use Jenkins!" << endl;
+	cout << "Welcome to use GitHub!" << endl;
 	cout << "Hello world, again!" << endl;
 	cout << "Hello world, again and again!" << endl;
 	ObjTwo *ot = new ObjTwo();
@@ -17,6 +21,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	ot->m_cSymbol = 'q';
 	cout << "Count : " << ot->getCount() << endl;
 	cout << "Symbol : " << ot->getSymbol() << endl;
-	return 0;
+        return 0;
 }
 
