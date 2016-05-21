@@ -1,16 +1,17 @@
 #include <iostream>
 #include "..\RPCInterface\hello.h" 
+#include "RPCClientImpl.h"
 
 void main()
 {
     RPC_STATUS status;
-    unsigned char * pszUuid             = NULL;
+    unsigned char * pszUuid = NULL;
     unsigned char * pszProtocolSequence = reinterpret_cast<unsigned char*>("ncacn_np");
-    unsigned char * pszNetworkAddress   = NULL;
-    unsigned char * pszEndpoint         = reinterpret_cast<unsigned char*>("\\pipe\\hello");
-    unsigned char * pszOptions          = NULL;
-    unsigned char * pszStringBinding    = NULL;
-    unsigned char * pszString           = reinterpret_cast<unsigned char*>("hello, world");
+    unsigned char * pszNetworkAddress = NULL;
+    unsigned char * pszEndpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
+    unsigned char * pszOptions = NULL;
+    unsigned char * pszStringBinding = NULL;
+    unsigned char * pszString = reinterpret_cast<unsigned char*>("hello, world");
     unsigned long ulCode;
 
     status = RpcStringBindingCompose(pszUuid,
@@ -23,7 +24,7 @@ void main()
     {
         exit(status);
     }
-    
+
     // hello_IfHandle is found from <interface-name>_c.c
     status = RpcBindingFromStringBinding(pszStringBinding, &hello_IfHandle);
 
@@ -32,19 +33,27 @@ void main()
         exit(status);
     }
 
-    RpcTryExcept  
+    RpcTryExcept
     {
         HelloProc(pszString);
+        BaseValueTest();
+        UnionParamProcTest();
+        UnionStructProcTest();
+        EncapsulatedUnionProcTest();
+        EnumProcTest();
+        VaryingArrayProcTest();
+        ConformantArrayProcTest();
+        PointerTypeProcTest();
         Shutdown();
     }
-    RpcExcept(1) 
+    RpcExcept(1)
     {
         ulCode = RpcExceptionCode();
-        std::cout<<"Runtime reported exception "<<ulCode<<std::endl;
+        std::cout << "Runtime reported exception " << ulCode << std::endl;
     }
     RpcEndExcept
 
-    status = RpcStringFree(&pszStringBinding); 
+    status = RpcStringFree(&pszStringBinding);
 
     if (status)
     {
@@ -61,6 +70,11 @@ void main()
     exit(0);
 }
 
+/* [callback] */ void DisplayString(
+    /* [string][in] */ unsigned char *p1)
+{
+    std::cout << p1 << std::endl;
+}
 /******************************************************/
 /*         MIDL allocate and free                     */
 /******************************************************/

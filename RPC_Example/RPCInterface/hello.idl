@@ -1,9 +1,101 @@
 [
-uuid(28b306b9-4f78-48d9-9444-a4a1df8539df),
-version(1.0)
+	uuid(28b306b9-4f78-48d9-9444-a4a1df8539df),
+	version(1.0)
 ]
 interface hello
 {
-    void HelloProc([in, string] unsigned char * pszString);
-    void Shutdown(void);
+	void HelloProc([in, string] unsigned char * pszString);
+	void Shutdown(void);
+
+	void BaseType([in, out] boolean *pBoolean,
+		[in, out] byte 		*pByte,
+		[in, out] char 		*pChar,
+		[in, out] double 	*pDouble,
+		[in, out] float 	*pFloat,
+		[in, out] hyper 	*pHyper,
+		[in, out] int 		*pInt,
+		[in, out] __int3264	*pInt3264,
+		[in, out] long		*pLong,
+		[in, out] short		*pShort,
+		[in, out] small		*pSmall,
+		[in, out] wchar_t	*pWchar_t
+	);
+
+	/* complex types */
+	typedef [switch_type(short)] union
+	{
+		[case(0)]    short     sVal;
+		[case(1)]    float     fVal;
+		[case(2)]    char      chVal;
+		[default]    ;
+	} DISCRIM_UNION_PARAM_TYPE;
+
+	short UnionParamProc(
+		[in, out, switch_is(sUtype)] DISCRIM_UNION_PARAM_TYPE *Union,
+		[in] short sUtype);
+
+	typedef struct
+	{
+		short utype;  /* discriminant can precede or follow union */
+		[switch_is(utype)] union
+		{
+		   [case(0)]   short     sVal;
+		   [case(1)]   float     fVal;
+		   [case(2)]   char      chVal;
+		   [default]   ;
+		} u;
+	} DISCRIM_UNION_STRUCT_TYPE;
+
+	short UnionStructProc(
+		[in, out] DISCRIM_UNION_STRUCT_TYPE *u1);
+
+	typedef union _UNION_ENCAPSULATED switch (long uType) uValue
+	{
+		case 1024:
+			float f1;
+		case 2048:
+			double d2;
+	} UNION_ENCAPSULATED;
+
+	long EncapsulatedUnionProc(
+		[in, out] UNION_ENCAPSULATED *encapsulatedUnion);
+
+	typedef enum _ENUM_WEEK
+	{
+		MONDAY = 0,
+		TUESDAY,
+		WEDNESDAY,
+		THURSDAY,
+		FRIDAY,
+		SATURDAY,
+		SUNDAY
+	} ENUM_WEEK;
+
+	void EnumProc([in, out] ENUM_WEEK *pEnumWeek);
+
+	[callback] void DisplayString([in, string] char * p1);
+
+	/* Arrays */
+	/* Varying array */
+    const long ARRAY_SIZE = 1000;
+
+    void VaryingArrayProc(
+        [in] long lFirstElement,
+        [in] long lChunkSize,
+        [in, out, first_is(lFirstElement), length_is(lChunkSize)] char achArray[ARRAY_SIZE]
+    );
+
+	/* Conformant array */
+    void ConformantArrayProc(
+         long lArraySize,
+         [in, out, size_is(lArraySize)] char achArray[*],
+		 long lMaxSize,
+         [in, out, max_is(lMaxSize)] char achArray2[*]
+    );
+
+	/* Pointer types */
+	void PointerTypeProc([in, out, ref] char *pReferenceChar,
+		[in, out, unique] char *pUniqueChar,
+		[in, out, ptr, string] char *pFullChar
+	);
 }

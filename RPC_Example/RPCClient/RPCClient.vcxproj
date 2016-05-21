@@ -80,9 +80,11 @@
   <ItemGroup>
     <ClCompile Include="..\RPCInterface\hello_c.c" />
     <ClCompile Include="helloc.cpp" />
+    <ClCompile Include="RPCClientImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RPCInterface\hello.h" />
+    <ClInclude Include="RPCClientImpl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

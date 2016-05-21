@@ -21,9 +21,15 @@
     <ClCompile Include="..\RPCInterface\hello_c.c">
       <Filter>Header Files</Filter>
     </ClCompile>
+    <ClCompile Include="RPCClientImpl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RPCInterface\hello.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RPCClientImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

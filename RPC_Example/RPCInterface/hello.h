@@ -3,11 +3,11 @@
 /* this ALWAYS GENERATED file contains the definitions for the interfaces */
 
 
- /* File created by MIDL compiler version 8.00.0595 */
-/* at Wed May 18 09:57:54 2016
+ /* File created by MIDL compiler version 8.00.0603 */
+/* at Sun May 22 01:14:55 2016
  */
 /* Compiler settings for hello.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0595 
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -56,6 +56,96 @@ void HelloProc(
     /* [string][in] */ unsigned char *pszString);
 
 void Shutdown( void);
+
+void BaseType(
+    /* [out][in] */ boolean *pBoolean,
+    /* [out][in] */ byte *pByte,
+    /* [out][in] */ unsigned char *pChar,
+    /* [out][in] */ double *pDouble,
+    /* [out][in] */ float *pFloat,
+    /* [out][in] */ hyper *pHyper,
+    /* [out][in] */ int *pInt,
+    /* [out][in] */ __int3264 *pInt3264,
+    /* [out][in] */ long *pLong,
+    /* [out][in] */ short *pShort,
+    /* [out][in] */ small *pSmall,
+    /* [out][in] */ wchar_t *pWchar_t);
+
+typedef /* [public][public][switch_type] */ union __MIDL_hello_0001
+    {
+    /* [case()] */ short sVal;
+    /* [case()] */ float fVal;
+    /* [case()] */ unsigned char chVal;
+    /* [default] */  /* Empty union arm */
+    } 	DISCRIM_UNION_PARAM_TYPE;
+
+short UnionParamProc(
+    /* [switch_is][out][in] */ DISCRIM_UNION_PARAM_TYPE *Union,
+    /* [in] */ short sUtype);
+
+typedef /* [public][public] */ struct __MIDL_hello_0002
+    {
+    short utype;
+    /* [switch_is] */ /* [switch_type] */ union
+        {
+        /* [case()] */ short sVal;
+        /* [case()] */ float fVal;
+        /* [case()] */ unsigned char chVal;
+        /* [default] */  /* Empty union arm */
+        } 	u;
+    } 	DISCRIM_UNION_STRUCT_TYPE;
+
+short UnionStructProc(
+    /* [out][in] */ DISCRIM_UNION_STRUCT_TYPE *u1);
+
+typedef struct _UNION_ENCAPSULATED
+    {
+    long uType;
+    /* [switch_is] */ /* [switch_type] */ union __MIDL_hello_0004
+        {
+        /* [case()] */ float f1;
+        /* [case()] */ double d2;
+        } 	uValue;
+    } 	UNION_ENCAPSULATED;
+
+long EncapsulatedUnionProc(
+    /* [out][in] */ UNION_ENCAPSULATED *encapsulatedUnion);
+
+typedef
+enum _ENUM_WEEK
+    {
+        MONDAY	= 0,
+        TUESDAY	= ( MONDAY + 1 ) ,
+        WEDNESDAY	= ( TUESDAY + 1 ) ,
+        THURSDAY	= ( WEDNESDAY + 1 ) ,
+        FRIDAY	= ( THURSDAY + 1 ) ,
+        SATURDAY	= ( FRIDAY + 1 ) ,
+        SUNDAY	= ( SATURDAY + 1 )
+    } 	ENUM_WEEK;
+
+void EnumProc(
+    /* [out][in] */ ENUM_WEEK *pEnumWeek);
+
+/* [callback] */ void DisplayString(
+    /* [string][in] */ unsigned char *p1);
+
+#define	ARRAY_SIZE	( 1000 )
+
+void VaryingArrayProc(
+    /* [in] */ long lFirstElement,
+    /* [in] */ long lChunkSize,
+    /* [length_is][first_is][out][in] */ unsigned char achArray[ 1000 ]);
+
+void ConformantArrayProc(
+    long lArraySize,
+    /* [size_is][out][in] */ unsigned char achArray[  ],
+    long lMaxSize,
+    /* [max_is][out][in] */ unsigned char achArray2[  ]);
+
+void PointerTypeProc(
+    /* [ref][out][in] */ unsigned char *pReferenceChar,
+    /* [unique][out][in] */ unsigned char *pUniqueChar,
+    /* [string][full][out][in] */ unsigned char *pFullChar);
 
 
 extern handle_t hello_IfHandle;

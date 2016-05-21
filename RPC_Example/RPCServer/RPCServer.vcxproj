@@ -80,6 +80,7 @@
   <ItemGroup>
     <ClCompile Include="..\RPCInterface\hello_s.c" />
     <ClCompile Include="hellos.cpp" />
+    <ClCompile Include="RPCServerImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RPCInterface\hello.h" />
