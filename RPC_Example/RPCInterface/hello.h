@@ -4,10 +4,10 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sun May 22 01:14:55 2016
+/* at Tue May 24 23:02:50 2016
  */
 /* Compiler settings for hello.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -57,7 +57,7 @@ void HelloProc(
 
 void Shutdown( void);
 
-void BaseType(
+void BaseType( 
     /* [out][in] */ boolean *pBoolean,
     /* [out][in] */ byte *pByte,
     /* [out][in] */ unsigned char *pChar,
@@ -76,26 +76,26 @@ typedef /* [public][public][switch_type] */ union __MIDL_hello_0001
     /* [case()] */ short sVal;
     /* [case()] */ float fVal;
     /* [case()] */ unsigned char chVal;
-    /* [default] */  /* Empty union arm */
+    /* [default] */  /* Empty union arm */ 
     } 	DISCRIM_UNION_PARAM_TYPE;
 
-short UnionParamProc(
+short UnionParamProc( 
     /* [switch_is][out][in] */ DISCRIM_UNION_PARAM_TYPE *Union,
     /* [in] */ short sUtype);
 
 typedef /* [public][public] */ struct __MIDL_hello_0002
     {
     short utype;
-    /* [switch_is] */ /* [switch_type] */ union
+    /* [switch_is] */ /* [switch_type] */ union 
         {
         /* [case()] */ short sVal;
         /* [case()] */ float fVal;
         /* [case()] */ unsigned char chVal;
-        /* [default] */  /* Empty union arm */
+        /* [default] */  /* Empty union arm */ 
         } 	u;
     } 	DISCRIM_UNION_STRUCT_TYPE;
 
-short UnionStructProc(
+short UnionStructProc( 
     /* [out][in] */ DISCRIM_UNION_STRUCT_TYPE *u1);
 
 typedef struct _UNION_ENCAPSULATED
@@ -108,10 +108,10 @@ typedef struct _UNION_ENCAPSULATED
         } 	uValue;
     } 	UNION_ENCAPSULATED;
 
-long EncapsulatedUnionProc(
+long EncapsulatedUnionProc( 
     /* [out][in] */ UNION_ENCAPSULATED *encapsulatedUnion);
 
-typedef
+typedef 
 enum _ENUM_WEEK
     {
         MONDAY	= 0,
@@ -120,32 +120,54 @@ enum _ENUM_WEEK
         THURSDAY	= ( WEDNESDAY + 1 ) ,
         FRIDAY	= ( THURSDAY + 1 ) ,
         SATURDAY	= ( FRIDAY + 1 ) ,
-        SUNDAY	= ( SATURDAY + 1 )
+        SUNDAY	= ( SATURDAY + 1 ) 
     } 	ENUM_WEEK;
 
-void EnumProc(
+void EnumProc( 
     /* [out][in] */ ENUM_WEEK *pEnumWeek);
 
-/* [callback] */ void DisplayString(
+/* [callback] */ void DisplayString( 
     /* [string][in] */ unsigned char *p1);
 
 #define	ARRAY_SIZE	( 1000 )
 
-void VaryingArrayProc(
+void VaryingArrayProc( 
     /* [in] */ long lFirstElement,
     /* [in] */ long lChunkSize,
     /* [length_is][first_is][out][in] */ unsigned char achArray[ 1000 ]);
 
-void ConformantArrayProc(
+void ConformantArrayProc( 
     long lArraySize,
     /* [size_is][out][in] */ unsigned char achArray[  ],
     long lMaxSize,
     /* [max_is][out][in] */ unsigned char achArray2[  ]);
 
-void PointerTypeProc(
+void PointerTypeProc( 
     /* [ref][out][in] */ unsigned char *pReferenceChar,
     /* [unique][out][in] */ unsigned char *pUniqueChar,
     /* [string][full][out][in] */ unsigned char *pFullChar);
+
+typedef struct pipe_LONG_PIPE
+    {
+    void (__RPC_USER * pull) (
+        char * state,
+        long * buf,
+        unsigned long esize,
+        unsigned long * ecount );
+    void (__RPC_USER * push) (
+        char * state,
+        long * buf,
+        unsigned long ecount );
+    void (__RPC_USER * alloc) (
+        char * state,
+        unsigned long bsize,
+        long * * buf,
+        unsigned long * bcount );
+    char * state;
+    } 	LONG_PIPE;
+
+void InPipe( 
+    /* [in] */ LONG_PIPE pipe_data);
 
 
 extern handle_t hello_IfHandle;

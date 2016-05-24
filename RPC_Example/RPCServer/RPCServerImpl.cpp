@@ -1,6 +1,21 @@
 #include <iostream>
 #include "..\RPCInterface\hello.h"
+#include "RPCServerImpl.h"
 
+/******************************************************/
+/*         MIDL allocate and free                     */
+/******************************************************/
+#define INCREMENT(X) if (*X) { (*X)++; }
+
+void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
+{
+    return(malloc(len));
+}
+
+void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
+{
+    free(ptr);
+}
 
 void HelloProc(unsigned char * pszString)
 {
@@ -43,17 +58,17 @@ void BaseType(
     /* [out][in] */ wchar_t *pWchar_t)
 {
     (*pBoolean) == TRUE ? (*pBoolean) = FALSE : (*pBoolean) = TRUE;
-    (*pByte)++;
-    (*pChar)++;
-    (*pDouble)++;
-    (*pFloat)++;
-    (*pHyper)++;
-    (*pInt)++;
-    (*pInt3264)++;
-    (*pLong)++;
-    (*pShort)++;
-    (*pSmall)++;
-    (*pWchar_t)++;
+    INCREMENT(pByte)
+    INCREMENT(pChar);
+    INCREMENT(pDouble)
+    INCREMENT(pFloat)
+    INCREMENT(pHyper)
+    INCREMENT(pInt)
+    INCREMENT(pInt3264)
+    INCREMENT(pLong)
+    INCREMENT(pShort)
+    INCREMENT(pSmall)
+    INCREMENT(pWchar_t)
 }
 
 short UnionParamProc(
@@ -160,7 +175,62 @@ void PointerTypeProc(
     /* [unique][out][in] */ unsigned char *pUniqueChar,
     /* [string][full][out][in] */ unsigned char *pFullChar)
 {
-    if (pReferenceChar) { (*pReferenceChar)++; }
-    if (pUniqueChar) { (*pUniqueChar)++; }
-    if (pFullChar) { (*pFullChar)++; }
+    INCREMENT(pReferenceChar)
+    INCREMENT(pUniqueChar)
+    INCREMENT(pFullChar)
 }
+
+#define PIPE_TRANSFER_SIZE 100 /* Transfer 100 pipe elements at one time */
+
+void InPipe(LONG_PIPE long_pipe)
+{
+    long local_pipe_buf[PIPE_TRANSFER_SIZE];
+    unsigned long actual_transfer_count = PIPE_TRANSFER_SIZE;
+    std::cout << "\tPIPE_TRANSFER_SIZE = " << PIPE_TRANSFER_SIZE << std::endl;
+    int j = 0;
+    while (actual_transfer_count > 0) /* Loop to get all the pipe data elements */
+    {
+        if (j != 0)
+        {
+            std::cout << std::endl;
+            j++;
+        }
+        std::cout << std::endl << "\tbefore pipe.pull( "
+            << (int)*long_pipe.state << " , "
+            << local_pipe_buf << " , "
+            << PIPE_TRANSFER_SIZE << " , "
+            << actual_transfer_count << " )" << std::endl;
+
+        std::cout << "\t";
+        for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+        {
+            if (i != 0 && i % 10 == 0)
+            {
+                std::cout << std::endl << "\t";
+            }
+            std::cout << local_pipe_buf[i] << " ";
+        }
+        std::cout << std::endl;
+
+        long_pipe.pull(long_pipe.state,
+            local_pipe_buf,
+            PIPE_TRANSFER_SIZE,
+            &actual_transfer_count);
+
+        std::cout << std::endl << "\tafter pipe.pull( "
+            << (int)*long_pipe.state << " , "
+            << local_pipe_buf << " , "
+            << PIPE_TRANSFER_SIZE << " , "
+            << actual_transfer_count << " )" << std::endl;
+        std::cout << "\t";
+        for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+        {
+            if (i != 0 && i % 10 == 0)
+            {
+                std::cout << std::endl << "\t";
+            }
+            std::cout << local_pipe_buf[i] << " ";
+        }
+        /* process the elements */
+    } // end while
+} //end InPipe

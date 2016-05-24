@@ -98,4 +98,7 @@ interface hello
 		[in, out, unique] char *pUniqueChar,
 		[in, out, ptr, string] char *pFullChar
 	);
+	
+	typedef pipe long LONG_PIPE;
+	void InPipe( [in] LONG_PIPE pipe_data );
 }

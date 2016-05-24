@@ -17,7 +17,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
@@ -51,7 +51,7 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;RPC_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -79,11 +79,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\RPCInterface\hello_s.c" />
-    <ClCompile Include="hellos.cpp" />
+    <ClCompile Include="RPCServer.cpp" />
     <ClCompile Include="RPCServerImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\RPCInterface\hello.h" />
+    <ClInclude Include="RPCServer.h" />
+    <ClInclude Include="RPCServerImpl.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

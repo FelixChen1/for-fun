@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sun May 22 01:14:55 2016
+/* at Tue May 24 23:02:50 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -34,8 +34,8 @@
 #include <string.h>
 #include "hello.h"
 
-#define TYPE_FORMAT_STRING_SIZE   211                               
-#define PROC_FORMAT_STRING_SIZE   457                               
+#define TYPE_FORMAT_STRING_SIZE   221                               
+#define PROC_FORMAT_STRING_SIZE   487                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -84,7 +84,7 @@ static const RPC_SERVER_INTERFACE hello___RpcServerInterface =
     0,
     0,
     &hello_ServerInfo,
-    0x04000000
+    0x04000001
     };
 RPC_IF_HANDLE hello_v1_0_s_ifspec = (RPC_IF_HANDLE)& hello___RpcServerInterface;
 
@@ -522,6 +522,29 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 452 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
 /* 454 */	NdrFcShort( 0xce ),	/* Type Offset=206 */
 
+	/* Procedure InPipe */
+
+/* 456 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x48,		/* Old Flags:  */
+/* 458 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 462 */	NdrFcShort( 0xa ),	/* 10 */
+/* 464 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
+/* 466 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 468 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 470 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
+			0x1,		/* 1 */
+/* 472 */	0x8,		/* 8 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 474 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 476 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 478 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pipe_data */
+
+/* 480 */	NdrFcShort( 0xc ),	/* Flags:  pipe, in, */
+/* 482 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
+/* 484 */	NdrFcShort( 0xd4 ),	/* Type Offset=212 */
+
 			0x0
         }
     };
@@ -683,6 +706,13 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /* 208 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
+/* 210 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/* 212 */	0xb5,		/* FC_PIPE */
+			0x3,		/* 3 */
+/* 214 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (210) */
+/* 216 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 218 */	NdrFcShort( 0x4 ),	/* 4 */
 
 			0x0
         }
@@ -721,7 +751,8 @@ static const unsigned short hello_FormatStringOffsetTable[] =
     264,
     324,
     366,
-    414
+    414,
+    456
     };
 
 
@@ -767,11 +798,12 @@ static const RPC_DISPATCH_FUNCTION hello_table[] =
     NdrServerCall2,
     NdrServerCall2,
     NdrServerCall2,
+    NdrServerCall2,
     0
     };
 static const RPC_DISPATCH_TABLE hello_v1_0_DispatchTable = 
     {
-    10,
+    11,
     (RPC_DISPATCH_FUNCTION*)hello_table
     };
 
@@ -786,7 +818,8 @@ static const SERVER_ROUTINE hello_ServerRoutineTable[] =
     (SERVER_ROUTINE)EnumProc,
     (SERVER_ROUTINE)VaryingArrayProc,
     (SERVER_ROUTINE)ConformantArrayProc,
-    (SERVER_ROUTINE)PointerTypeProc
+    (SERVER_ROUTINE)PointerTypeProc,
+    (SERVER_ROUTINE)InPipe
     };
 
 static const MIDL_SERVER_INFO hello_ServerInfo = 

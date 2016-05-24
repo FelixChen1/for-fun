@@ -44,6 +44,7 @@ void main()
         VaryingArrayProcTest();
         ConformantArrayProcTest();
         PointerTypeProcTest();
+        InPipeTest();
         Shutdown();
     }
     RpcExcept(1)

@@ -1,13 +1,22 @@
+#include "RPCServer.h"
 #include "RPCServerImpl.h"
 
-void main()
+RPCServer::RPCServer()
+{
+    pszProtocolSequence = reinterpret_cast<unsigned char*>("ncacn_np");
+    pszSecurity = NULL;
+    pszEndpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
+    cMinCalls = 1;
+    fDontWait = FALSE;
+}
+
+RPCServer::~RPCServer()
+{
+}
+
+bool RPCServer::InitRPCServer()
 {
     RPC_STATUS status;
-    unsigned char * pszProtocolSequence = reinterpret_cast<unsigned char*>("ncacn_np");
-    unsigned char * pszSecurity         = NULL;
-    unsigned char * pszEndpoint         = reinterpret_cast<unsigned char*>("\\pipe\\hello");
-    unsigned int    cMinCalls = 1;
-    unsigned int    fDontWait = FALSE;
 
     // there are typo error in website:
     // https://msdn.microsoft.com/en-us/library/windows/desktop/aa378869%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
@@ -20,15 +29,15 @@ void main()
 
     if (status)
     {
-        exit(status);
+        return false;
     }
-    
+
     // hello_v1_0_s_ifspec is found from <interface-name>_s.c
-    status = RpcServerRegisterIf(hello_v1_0_s_ifspec, NULL, NULL); 
+    status = RpcServerRegisterIf(hello_v1_0_s_ifspec, NULL, NULL);
 
     if (status)
     {
-        exit(status);
+        return false;
     }
 
     status = RpcServerListen(cMinCalls, RPC_C_LISTEN_MAX_CALLS_DEFAULT,
@@ -36,6 +45,18 @@ void main()
 
     if (status)
     {
-        exit(status);
+        return false;
     }
+
+    return true;
+}
+
+void RPCServer::HelloProc(unsigned char * pszString)
+{
+    ::HelloProc(pszString);
+}
+
+void RPCServer::Shutdown(void)
+{
+    ::Shutdown();
 }

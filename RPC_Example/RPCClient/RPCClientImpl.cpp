@@ -1,51 +1,23 @@
 #include <iostream>
 #include"RPCClientImpl.h"
 
-void BaseValueTest()
+/******************************************************/
+/*         MIDL allocate and free                     */
+/******************************************************/
+
+void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {
-    std::cout << "========== BaseValueTest ==========" << std::endl;
-    boolean booleanValue = true;
-    byte byteValue = 'a';
-    unsigned char unsignedCharValue = 'a';
-    double doubleValue = 6.3L;
-    float floatValue = 6.3f;
-    hyper hyperValue = 9223372036854775807;       //2^63 - 1
-    int intValue = 2147483647;                    //2^31 - 1
-    __int3264 int3264Value = 2147483647;          //2^31 - 1
-    long longValue = 2147483647;                  //2^31 - 1
-    short shortValue = 32767;                     //2^15 - 1
-    small smallValue = 'a';
-    wchar_t wchar_tValue = L'a';
+    return(malloc(len));
+}
 
-    std::cout << "send:" << std::endl;
-    std::cout << "\tboolean:" << (booleanValue ? "true" : "false") << std::endl
-        << "\tbyte:" << byteValue << std::endl
-        << "\tunsigned char:" << unsignedCharValue << std::endl
-        << "\tdouble:" << doubleValue << std::endl
-        << "\tfloat:" << floatValue << std::endl
-        << "\thyper:" << hyperValue << std::endl
-        << "\tint:" << intValue << std::endl
-        << "\tlong:" << longValue << std::endl
-        << "\tshort:" << shortValue << std::endl
-        << "\tsmall:" << smallValue << std::endl;
-    std::wcout << L"\twchar_t:" << wchar_tValue << std::endl;
+void __RPC_USER midl_user_free(void __RPC_FAR * ptr)
+{
+    free(ptr);
+}
 
-    BaseType(&booleanValue, &byteValue, &unsignedCharValue, &doubleValue, &floatValue,
-        &hyperValue, &intValue, &int3264Value, &longValue, &shortValue, &smallValue, &wchar_tValue);
-
-    std::cout << "receive:" << std::endl;
-    std::cout << "boolean:" << (booleanValue ? "true" : "false") << std::endl
-        << "\tbyte:" << byteValue << std::endl
-        << "\tunsigned char:" << unsignedCharValue << std::endl
-        << "\tdouble:" << doubleValue << std::endl
-        << "\tfloat:" << floatValue << std::endl
-        << "\thyper:" << hyperValue << std::endl
-        << "\tint:" << intValue << std::endl
-        << "\tlong:" << longValue << std::endl
-        << "\tshort:" << shortValue << std::endl
-        << "\tsmall:" << smallValue << std::endl;
-    std::wcout << L"\twchar_t:" << wchar_tValue << std::endl;
-    std::cout << std::endl;
+void DisplayString(unsigned char *p1)
+{
+    std::cout << p1 << std::endl;
 }
 
 void UnionParamProcTest()
@@ -273,3 +245,100 @@ void PointerTypeProcTest()
         << "full char: " << fullChar << std::endl;
     std::cout << std::endl;
 }
+
+#define BUF_SIZE 50
+#define PIPE_SIZE 100
+long *globalPipeData;
+long globalBuffer[BUF_SIZE];
+
+char pipeDataIndex; /* state variable */
+
+void InPipeTest()
+{
+    std::cout << "========== InPipeTest ==========" << std::endl;
+    LONG_PIPE inPipe;
+    int i;
+    globalPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
+
+    for (i = 0; i < PIPE_SIZE; i++)
+    {
+        globalPipeData[i] = 5;
+    }
+
+    pipeDataIndex = 0;
+    inPipe.state = &pipeDataIndex;
+    inPipe.pull = PipePull;
+    inPipe.alloc = PipeAlloc;
+
+    InPipe(inPipe); /* Make the rpc */
+
+    free((void *)globalPipeData);
+    std::cout << std::endl;
+
+}//end SendLongs
+
+void __RPC_USER PipeAlloc(char* stateInfo, unsigned long requestedSize, long **allocatedBuffer, unsigned long *allocatedSize)
+{
+    std::cout << "\tPipeAlloc("
+        << (int)*stateInfo << " , "
+        << requestedSize << " , "
+        << allocatedBuffer << " , "
+        << *allocatedSize << ")" << std::endl;
+    char *state = stateInfo;
+    if (requestedSize > (BUF_SIZE*sizeof(long)))
+    {
+        *allocatedSize = BUF_SIZE * sizeof(long);
+    }
+    else
+    {
+        *allocatedSize = requestedSize;
+    }
+    *allocatedBuffer = globalBuffer;
+    std::cout << "\t         ("
+        << (int)*stateInfo << " , "
+        << requestedSize << " , "
+        << allocatedBuffer << " , "
+        << *allocatedSize << ")" << std::endl;
+} //end PipeAlloc
+
+void __RPC_USER PipePull(char* stateInfo, long *inputBuffer, unsigned long maxBufSize, unsigned long *sizeToSend)
+{
+    std::cout << "\tPipePull("
+        << (int)*stateInfo << " , "
+        << inputBuffer << " , "
+        << maxBufSize << " , "
+        << *sizeToSend << ")" << std::endl;
+    small currentIndex;
+    unsigned long i;
+    small elementsToRead;
+    char *state = stateInfo;
+
+    currentIndex = *state;
+    if (*state >= PIPE_SIZE)
+    {
+        std::cout << "\tend of pipe data" << std::endl;
+        *sizeToSend = 0; /* end of pipe data */
+        *state = 0; /* Reset the state = global index */
+    }
+    else
+    {
+        if (currentIndex + maxBufSize > PIPE_SIZE)
+            elementsToRead = PIPE_SIZE - currentIndex;
+        else
+            elementsToRead = maxBufSize;
+
+        for (i = 0; i < elementsToRead; i++)
+        {
+            /*client sends data */
+            inputBuffer[i] = globalPipeData[i + currentIndex];
+        }
+
+        *state += elementsToRead;
+        *sizeToSend = elementsToRead;
+    }
+    std::cout << "\t        ("
+        << (int)*stateInfo << " , "
+        << inputBuffer << " , "
+        << maxBufSize << " , "
+        << *sizeToSend << ")" << std::endl;
+}//end PipePull

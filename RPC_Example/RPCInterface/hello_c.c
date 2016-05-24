@@ -4,10 +4,10 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sun May 22 01:14:55 2016
+/* at Tue May 24 23:02:50 2016
  */
 /* Compiler settings for hello.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603
+    Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
     protocol : dce , ms_ext, c_ext, robust
     error checks: allocation ref bounds_check enum stub_data 
     VC __declspec() decoration level: 
@@ -35,8 +35,8 @@
 
 #include "hello.h"
 
-#define TYPE_FORMAT_STRING_SIZE   211
-#define PROC_FORMAT_STRING_SIZE   457
+#define TYPE_FORMAT_STRING_SIZE   221                               
+#define PROC_FORMAT_STRING_SIZE   487                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -91,7 +91,7 @@ static const RPC_CLIENT_INTERFACE hello___RpcClientInterface =
     0,
     0,
     &hello_ServerInfo,
-    0x04000000
+    0x04000001
     };
 RPC_IF_HANDLE hello_v1_0_c_ifspec = (RPC_IF_HANDLE)& hello___RpcClientInterface;
 
@@ -100,7 +100,7 @@ extern const MIDL_STUB_DESC hello_StubDesc;
 static RPC_BINDING_HANDLE hello__MIDL_AutoBindHandle;
 
 
-void HelloProc(
+void HelloProc( 
     /* [string][in] */ unsigned char *pszString)
 {
 
@@ -123,7 +123,7 @@ void Shutdown( void)
 }
 
 
-void BaseType(
+void BaseType( 
     /* [out][in] */ boolean *pBoolean,
     /* [out][in] */ byte *pByte,
     /* [out][in] */ unsigned char *pChar,
@@ -142,11 +142,11 @@ void BaseType(
                   ( PMIDL_STUB_DESC  )&hello_StubDesc,
                   (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[54],
                   ( unsigned char * )&pBoolean);
-
+    
 }
 
 
-short UnionParamProc(
+short UnionParamProc( 
     /* [switch_is][out][in] */ DISCRIM_UNION_PARAM_TYPE *Union,
     /* [in] */ short sUtype)
 {
@@ -162,7 +162,7 @@ short UnionParamProc(
 }
 
 
-short UnionStructProc(
+short UnionStructProc( 
     /* [out][in] */ DISCRIM_UNION_STRUCT_TYPE *u1)
 {
 
@@ -177,7 +177,7 @@ short UnionStructProc(
 }
 
 
-long EncapsulatedUnionProc(
+long EncapsulatedUnionProc( 
     /* [out][in] */ UNION_ENCAPSULATED *encapsulatedUnion)
 {
 
@@ -192,7 +192,7 @@ long EncapsulatedUnionProc(
 }
 
 
-void EnumProc(
+void EnumProc( 
     /* [out][in] */ ENUM_WEEK *pEnumWeek)
 {
 
@@ -204,7 +204,7 @@ void EnumProc(
 }
 
 
-void VaryingArrayProc(
+void VaryingArrayProc( 
     /* [in] */ long lFirstElement,
     /* [in] */ long lChunkSize,
     /* [length_is][first_is][out][in] */ unsigned char achArray[ 1000 ])
@@ -218,7 +218,7 @@ void VaryingArrayProc(
 }
 
 
-void ConformantArrayProc(
+void ConformantArrayProc( 
     long lArraySize,
     /* [size_is][out][in] */ unsigned char achArray[  ],
     long lMaxSize,
@@ -233,7 +233,7 @@ void ConformantArrayProc(
 }
 
 
-void PointerTypeProc(
+void PointerTypeProc( 
     /* [ref][out][in] */ unsigned char *pReferenceChar,
     /* [unique][out][in] */ unsigned char *pUniqueChar,
     /* [string][full][out][in] */ unsigned char *pFullChar)
@@ -243,6 +243,18 @@ void PointerTypeProc(
                   ( PMIDL_STUB_DESC  )&hello_StubDesc,
                   (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[414],
                   ( unsigned char * )&pReferenceChar);
+    
+}
+
+
+void InPipe( 
+    /* [in] */ LONG_PIPE pipe_data)
+{
+
+    NdrClientCall2(
+                  ( PMIDL_STUB_DESC  )&hello_StubDesc,
+                  (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[456],
+                  ( unsigned char * )&pipe_data);
     
 }
 
@@ -665,6 +677,29 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 452 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
 /* 454 */	NdrFcShort( 0xce ),	/* Type Offset=206 */
 
+	/* Procedure InPipe */
+
+/* 456 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x48,		/* Old Flags:  */
+/* 458 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 462 */	NdrFcShort( 0xa ),	/* 10 */
+/* 464 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
+/* 466 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 468 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 470 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
+			0x1,		/* 1 */
+/* 472 */	0x8,		/* 8 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 474 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 476 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 478 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pipe_data */
+
+/* 480 */	NdrFcShort( 0xc ),	/* Flags:  pipe, in, */
+/* 482 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
+/* 484 */	NdrFcShort( 0xd4 ),	/* Type Offset=212 */
+
 			0x0
         }
     };
@@ -679,11 +714,11 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /*  4 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/*  6 */
+/*  6 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
 /*  8 */	0x3,		/* FC_SMALL */
 			0x5c,		/* FC_PAD */
-/* 10 */
+/* 10 */	
 			0x11, 0x8,	/* FC_RP [simple_pointer] */
 /* 12 */	0x1,		/* FC_BYTE */
 			0x5c,		/* FC_PAD */
@@ -826,6 +861,13 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /* 208 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
+/* 210 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/* 212 */	0xb5,		/* FC_PIPE */
+			0x3,		/* 3 */
+/* 214 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (210) */
+/* 216 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 218 */	NdrFcShort( 0x4 ),	/* 4 */
 
 			0x0
         }
@@ -849,7 +891,7 @@ static void __RPC_USER hello_VaryingArrayProcExprEval_0000( PMIDL_STUB_MESSAGE p
     pStubMsg->MaxCount = ( unsigned long ) ( pS->lChunkSize );
 }
 
-static const EXPR_EVAL ExprEvalRoutines[] =
+static const EXPR_EVAL ExprEvalRoutines[] = 
     {
     hello_VaryingArrayProcExprEval_0000
     };
@@ -866,7 +908,8 @@ static const unsigned short hello_FormatStringOffsetTable[] =
     264,
     324,
     366,
-    414
+    414,
+    456
     };
 
 
@@ -905,18 +948,18 @@ static const RPC_DISPATCH_FUNCTION hello_table[] =
     NdrServerCall2,
     0
     };
-static const RPC_DISPATCH_TABLE hello_v1_0_DispatchTable =
+static const RPC_DISPATCH_TABLE hello_v1_0_DispatchTable = 
     {
     1,
     (RPC_DISPATCH_FUNCTION*)hello_table
     };
 
-static const SERVER_ROUTINE hello_ServerRoutineTable[] =
+static const SERVER_ROUTINE hello_ServerRoutineTable[] = 
     {
     (SERVER_ROUTINE)DisplayString,
     };
 
-static const MIDL_SERVER_INFO hello_ServerInfo =
+static const MIDL_SERVER_INFO hello_ServerInfo = 
     {
     &hello_StubDesc,
     hello_ServerRoutineTable,
