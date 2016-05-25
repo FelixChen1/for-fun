@@ -7,7 +7,7 @@ RPCServer::RPCServer()
     pszSecurity = NULL;
     pszEndpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
     cMinCalls = 1;
-    fDontWait = FALSE;
+    fDontWait = TRUE;
 }
 
 RPCServer::~RPCServer()
