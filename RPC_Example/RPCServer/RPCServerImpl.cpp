@@ -5,7 +5,7 @@
 /******************************************************/
 /*         MIDL allocate and free                     */
 /******************************************************/
-#define INCREMENT(X) if (*X) { (*X)++; }
+#define INCREMENT(X) if (X) { (*X)++; }
 
 void __RPC_FAR * __RPC_USER midl_user_allocate(size_t len)
 {
@@ -175,7 +175,7 @@ void PointerTypeProc(
     /* [unique][out][in] */ unsigned char *pUniqueChar,
     /* [string][full][out][in] */ unsigned char *pFullChar)
 {
-    INCREMENT(pReferenceChar)
+    (*pReferenceChar)++;
     INCREMENT(pUniqueChar)
     INCREMENT(pFullChar)
 }
@@ -186,51 +186,12 @@ void InPipe(LONG_PIPE long_pipe)
 {
     long local_pipe_buf[PIPE_TRANSFER_SIZE];
     unsigned long actual_transfer_count = PIPE_TRANSFER_SIZE;
-    std::cout << "\tPIPE_TRANSFER_SIZE = " << PIPE_TRANSFER_SIZE << std::endl;
-    int j = 0;
     while (actual_transfer_count > 0) /* Loop to get all the pipe data elements */
     {
-        if (j != 0)
-        {
-            std::cout << std::endl;
-            j++;
-        }
-        std::cout << std::endl << "\tbefore pipe.pull( "
-            << (int)*long_pipe.state << " , "
-            << local_pipe_buf << " , "
-            << PIPE_TRANSFER_SIZE << " , "
-            << actual_transfer_count << " )" << std::endl;
-
-        std::cout << "\t";
-        for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
-        {
-            if (i != 0 && i % 10 == 0)
-            {
-                std::cout << std::endl << "\t";
-            }
-            std::cout << local_pipe_buf[i] << " ";
-        }
-        std::cout << std::endl;
-
         long_pipe.pull(long_pipe.state,
             local_pipe_buf,
             PIPE_TRANSFER_SIZE,
             &actual_transfer_count);
-
-        std::cout << std::endl << "\tafter pipe.pull( "
-            << (int)*long_pipe.state << " , "
-            << local_pipe_buf << " , "
-            << PIPE_TRANSFER_SIZE << " , "
-            << actual_transfer_count << " )" << std::endl;
-        std::cout << "\t";
-        for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
-        {
-            if (i != 0 && i % 10 == 0)
-            {
-                std::cout << std::endl << "\t";
-            }
-            std::cout << local_pipe_buf[i] << " ";
-        }
         /* process the elements */
     } // end while
 } //end InPipe
