@@ -149,6 +149,11 @@ void RPCClient::InPipe(LONG_PIPE pipe_data)
     ::InPipe(pipe_data);
 }
 
+void RPCClient::OutPipe(LONG_PIPE *pipe_data)
+{
+    ::OutPipe(pipe_data);
+}
+
 bool RPCClient::Shutdown(void)
 {
     ::Shutdown();

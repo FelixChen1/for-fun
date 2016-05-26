@@ -41,6 +41,8 @@ public:
         unsigned char *pUniqueChar,
         unsigned char *pFullChar);
     void InPipe(LONG_PIPE pipe_data);
+    void OutPipe(LONG_PIPE *pipe_data);
+
     bool Shutdown(void);
 
 private:

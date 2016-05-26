@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Tue May 24 23:02:50 2016
+/* at Fri May 27 01:30:18 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -35,8 +35,8 @@
 
 #include "hello.h"
 
-#define TYPE_FORMAT_STRING_SIZE   221                               
-#define PROC_FORMAT_STRING_SIZE   487                               
+#define TYPE_FORMAT_STRING_SIZE   235                               
+#define PROC_FORMAT_STRING_SIZE   517                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -254,6 +254,18 @@ void InPipe(
     NdrClientCall2(
                   ( PMIDL_STUB_DESC  )&hello_StubDesc,
                   (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[456],
+                  ( unsigned char * )&pipe_data);
+    
+}
+
+
+void OutPipe( 
+    /* [out] */ LONG_PIPE *pipe_data)
+{
+
+    NdrClientCall2(
+                  ( PMIDL_STUB_DESC  )&hello_StubDesc,
+                  (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[486],
                   ( unsigned char * )&pipe_data);
     
 }
@@ -700,6 +712,29 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 482 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
 /* 484 */	NdrFcShort( 0xd4 ),	/* Type Offset=212 */
 
+	/* Procedure OutPipe */
+
+/* 486 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x48,		/* Old Flags:  */
+/* 488 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 492 */	NdrFcShort( 0xb ),	/* 11 */
+/* 494 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 496 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 498 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 500 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
+			0x1,		/* 1 */
+/* 502 */	0x8,		/* 8 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 504 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 506 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 508 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter pipe_data */
+
+/* 510 */	NdrFcShort( 0x4114 ),	/* Flags:  pipe, out, simple ref, srv alloc size=16 */
+/* 512 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
+/* 514 */	NdrFcShort( 0xe2 ),	/* Type Offset=226 */
+
 			0x0
         }
     };
@@ -868,6 +903,16 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /* 214 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (210) */
 /* 216 */	NdrFcShort( 0x4 ),	/* 4 */
 /* 218 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 220 */	
+			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
+/* 222 */	NdrFcShort( 0x4 ),	/* Offset= 4 (226) */
+/* 224 */	0x8,		/* FC_LONG */
+			0x5c,		/* FC_PAD */
+/* 226 */	0xb5,		/* FC_PIPE */
+			0x3,		/* 3 */
+/* 228 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (224) */
+/* 230 */	NdrFcShort( 0x4 ),	/* 4 */
+/* 232 */	NdrFcShort( 0x4 ),	/* 4 */
 
 			0x0
         }
@@ -909,7 +954,8 @@ static const unsigned short hello_FormatStringOffsetTable[] =
     324,
     366,
     414,
-    456
+    456,
+    486
     };
 
 

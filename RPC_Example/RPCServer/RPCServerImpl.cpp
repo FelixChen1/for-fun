@@ -198,3 +198,41 @@ void InPipe(LONG_PIPE long_pipe)
         }
     } // end while
 } //end InPipe
+
+void OutPipe(LONG_PIPE *outputPipe)
+{
+    const int PIPE_TRANSFER_SIZE = 100;
+    const int PIPE_SIZE = 100;
+    long *outputPipeData;
+    unsigned long index = 0;
+    unsigned long elementsToSend = PIPE_TRANSFER_SIZE;
+
+    /* Allocate memory for the data to be passed back in the pipe */
+    outputPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
+    for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+    {
+        outputPipeData[i] = i;
+    }
+
+    while (elementsToSend >0) /* Loop to send pipe data elements */
+    {
+        if (index >= PIPE_SIZE)
+            elementsToSend = 0;
+        else
+        {
+            if ((index + PIPE_TRANSFER_SIZE) > PIPE_SIZE)
+                elementsToSend = PIPE_SIZE - index;
+            else
+                elementsToSend = PIPE_TRANSFER_SIZE;
+        }
+
+        outputPipe->push(outputPipe->state,
+            &(outputPipeData[index]),
+            elementsToSend);
+        index += elementsToSend;
+
+    } //end while
+
+    free((void *)outputPipeData);
+
+}

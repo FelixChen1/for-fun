@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Tue May 24 23:02:50 2016
+/* at Fri May 27 01:30:18 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -168,6 +168,9 @@ typedef struct pipe_LONG_PIPE
 
 void InPipe( 
     /* [in] */ LONG_PIPE pipe_data);
+
+void OutPipe( 
+    /* [out] */ LONG_PIPE *pipe_data);
 
 
 extern handle_t hello_IfHandle;
