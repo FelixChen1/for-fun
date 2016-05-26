@@ -18,10 +18,10 @@
     <ClCompile Include="..\RPCInterface\hello_c.c">
       <Filter>Header Files</Filter>
     </ClCompile>
-    <ClCompile Include="RPCClientImpl.cpp">
+    <ClCompile Include="RPCClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RPCClient.cpp">
+    <ClCompile Include="RPCClientImpl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -29,10 +29,13 @@
     <ClInclude Include="..\RPCInterface\hello.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RPCClientImpl.h">
+    <ClInclude Include="RPCClient.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RPCClient.h">
+    <ClInclude Include="..\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RPCClientImpl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -83,6 +83,7 @@
     <ClCompile Include="RPCServerImpl.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\global.h" />
     <ClInclude Include="..\RPCInterface\hello.h" />
     <ClInclude Include="RPCServer.h" />
     <ClInclude Include="RPCServerImpl.h" />

@@ -180,10 +180,9 @@ void PointerTypeProc(
     INCREMENT(pFullChar)
 }
 
-#define PIPE_TRANSFER_SIZE 100 /* Transfer 100 pipe elements at one time */
-
 void InPipe(LONG_PIPE long_pipe)
 {
+    const int PIPE_TRANSFER_SIZE = 100; /* Transfer 100 pipe elements at one time */
     long local_pipe_buf[PIPE_TRANSFER_SIZE];
     unsigned long actual_transfer_count = PIPE_TRANSFER_SIZE;
     while (actual_transfer_count > 0) /* Loop to get all the pipe data elements */
@@ -193,5 +192,9 @@ void InPipe(LONG_PIPE long_pipe)
             PIPE_TRANSFER_SIZE,
             &actual_transfer_count);
         /* process the elements */
+        for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+        {
+            local_pipe_buf[i]++;
+        }
     } // end while
 } //end InPipe

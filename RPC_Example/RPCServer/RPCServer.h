@@ -1,9 +1,6 @@
 #pragma once
-#ifdef RPC_EXPORTS
-#define RPC_API __declspec(dllexport)
-#else
-#define RPC_API __declspec(dllimport)
-#endif
+#include "..\global.h"
+#include "..\RPCInterface\hello.h"
 
 class RPC_API RPCServer
 {
@@ -14,6 +11,19 @@ public:
     bool InitRPCServer();
 
     void HelloProc(unsigned char * pszString);
+    void BaseType(
+        /* [out][in] */ boolean *pBoolean,
+        /* [out][in] */ byte *pByte,
+        /* [out][in] */ unsigned char *pChar,
+        /* [out][in] */ double *pDouble,
+        /* [out][in] */ float *pFloat,
+        /* [out][in] */ hyper *pHyper,
+        /* [out][in] */ int *pInt,
+        /* [out][in] */ __int3264 *pInt3264,
+        /* [out][in] */ long *pLong,
+        /* [out][in] */ short *pShort,
+        /* [out][in] */ small *pSmall,
+        /* [out][in] */ wchar_t *pWchar_t);
     void Shutdown(void);
 private:
     unsigned char * pszProtocolSequence;

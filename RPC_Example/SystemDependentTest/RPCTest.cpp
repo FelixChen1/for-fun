@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include "..\global.h"
 #include "..\RPCServer\RPCServer.h"
 #include "..\RPCClient\RPCClient.h"
 
@@ -7,8 +8,66 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace SystemDependentTest
 {
+
+    #define BUF_SIZE 50
+    #define PIPE_SIZE 100
+    long *globalPipeData;
+    long globalBuffer[BUF_SIZE];
+    char pipeDataIndex; /* state variable */
+    int allocCount = 0;
+    int pullCount = 0;
+
     RPCServer server;
     RPCClient client;
+
+
+    void __RPC_USER PipeAlloc(char* stateInfo, unsigned long requestedSize, long **allocatedBuffer, unsigned long *allocatedSize)
+    {
+        allocCount++;
+        char *state = stateInfo;
+        if (requestedSize > (BUF_SIZE*sizeof(long)))
+        {
+            *allocatedSize = BUF_SIZE * sizeof(long);
+        }
+        else
+        {
+            *allocatedSize = requestedSize;
+        }
+        *allocatedBuffer = globalBuffer;
+    } //end PipeAlloc
+
+    void static __RPC_USER PipePull(char* stateInfo, long *inputBuffer, unsigned long maxBufSize, unsigned long *sizeToSend)
+    {
+        pullCount++;
+        small currentIndex;
+        unsigned long i;
+        small elementsToRead;
+        char *state = stateInfo;
+
+        currentIndex = *state;
+        if (*state >= PIPE_SIZE)
+        {
+            *sizeToSend = 0; /* end of pipe data */
+            *state = 0; /* Reset the state = global index */
+        }
+        else
+        {
+            if (currentIndex + maxBufSize > PIPE_SIZE)
+                elementsToRead = PIPE_SIZE - currentIndex;
+            else
+                elementsToRead = maxBufSize;
+
+            for (i = 0; i < elementsToRead; i++)
+            {
+                /*client sends data */
+                inputBuffer[i] = globalPipeData[i + currentIndex];
+            }
+
+            *state += elementsToRead;
+            *sizeToSend = elementsToRead;
+        }
+    }//end PipePull
+
     TEST_CLASS(RPCTest)
     {
     public:
@@ -254,10 +313,33 @@ namespace SystemDependentTest
         }
 
         TEST_METHOD(InPipeTest)
-        {}
+        {
+            LONG_PIPE inPipe;
+            int i;
+            globalPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
+
+            for (i = 0; i < PIPE_SIZE; i++)
+            {
+                globalPipeData[i] = 5;
+            }
+
+            pipeDataIndex = 0;
+            inPipe.state = &pipeDataIndex;
+            inPipe.pull = PipePull;
+            inPipe.alloc = PipeAlloc;
+
+            client.InPipe(inPipe); /* Make the rpc */
+
+            free((void *)globalPipeData);
+
+            Assert::AreEqual(3, allocCount);
+            Assert::AreEqual(3, pullCount);
+        }
 
         TEST_METHOD(ShutdownTest)
-        {}
+        {
+        }
 
     };
+
 }

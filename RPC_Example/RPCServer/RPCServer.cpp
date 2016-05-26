@@ -40,8 +40,7 @@ bool RPCServer::InitRPCServer()
         return false;
     }
 
-    status = RpcServerListen(cMinCalls, RPC_C_LISTEN_MAX_CALLS_DEFAULT,
-        fDontWait);
+    status = RpcServerListen(cMinCalls, RPC_C_LISTEN_MAX_CALLS_DEFAULT, fDontWait);
 
     if (status)
     {
@@ -54,6 +53,23 @@ bool RPCServer::InitRPCServer()
 void RPCServer::HelloProc(unsigned char * pszString)
 {
     ::HelloProc(pszString);
+}
+
+void RPCServer::BaseType(
+    /* [out][in] */ boolean *pBoolean,
+    /* [out][in] */ byte *pByte,
+    /* [out][in] */ unsigned char *pChar,
+    /* [out][in] */ double *pDouble,
+    /* [out][in] */ float *pFloat,
+    /* [out][in] */ hyper *pHyper,
+    /* [out][in] */ int *pInt,
+    /* [out][in] */ __int3264 *pInt3264,
+    /* [out][in] */ long *pLong,
+    /* [out][in] */ short *pShort,
+    /* [out][in] */ small *pSmall,
+    /* [out][in] */ wchar_t *pWchar_t)
+{
+    ::BaseType(pBoolean, pByte, pChar, pDouble, pFloat, pHyper, pInt, pInt3264, pLong, pShort, pSmall, pWchar_t);
 }
 
 void RPCServer::Shutdown(void)

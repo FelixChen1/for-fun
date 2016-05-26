@@ -57,19 +57,19 @@ void RPCClient::InitRPCClient()
     }
     bInitialized = true;
 }
-//void RPCClient::HelloProc(unsigned char * pszString)
-//{
-//    RpcTryExcept
-//    {
-//        ::HelloProc(pszString);
-//    }
-//    RpcExcept(1)
-//    {
-//        unsigned long ulCode = RpcExceptionCode();
-//        std::cout << "Runtime reported exception " << ulCode << std::endl;
-//    }
-//    RpcEndExcept
-//}
+void RPCClient::HelloProc(unsigned char * pszString)
+{
+    RpcTryExcept
+    {
+        ::HelloProc(pszString);
+    }
+    RpcExcept(1)
+    {
+        unsigned long ulCode = RpcExceptionCode();
+        std::cout << "Runtime reported exception " << ulCode << std::endl;
+    }
+    RpcEndExcept
+}
 
 bool RPCClient::BaseType(boolean *pBoolean,
     byte *pByte,

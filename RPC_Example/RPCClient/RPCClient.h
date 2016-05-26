@@ -1,9 +1,5 @@
 #pragma once
-#ifdef RPC_EXPORTS
-#define RPC_API __declspec(dllexport)
-#else
-#define RPC_API __declspec(dllimport)
-#endif
+#include "..\global.h"
 #include "..\RPCInterface\hello.h"
 
 class RPC_API RPCClient
@@ -14,7 +10,7 @@ public:
 
     void InitRPCClient();
 
-    //void HelloProc(unsigned char * pszString);
+    void HelloProc(unsigned char * pszString);
     bool BaseType(boolean *pBoolean,
         byte *pByte,
         unsigned char *pChar,
