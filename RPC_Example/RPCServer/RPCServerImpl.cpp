@@ -225,7 +225,7 @@ void OutPipe(LONG_PIPE *outputPipe)
             else
                 elementsToSend = PIPE_TRANSFER_SIZE;
         }
-
+		(*(outputPipe->state)) = 0;
         outputPipe->push(outputPipe->state,
             &(outputPipeData[index]),
             elementsToSend);
@@ -234,5 +234,38 @@ void OutPipe(LONG_PIPE *outputPipe)
     } //end while
 
     free((void *)outputPipeData);
+}
 
+void InOutPipe(CHAR_PIPE *pipe_data)
+{
+	const int PIPE_TRANSFER_SIZE = 100; /* Transfer 100 pipe elements at one time */
+
+	unsigned char local_pipe_buf[PIPE_TRANSFER_SIZE];
+
+	for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+	{
+		local_pipe_buf[i] = 99;
+	}
+
+	unsigned long actual_transfer_count = PIPE_TRANSFER_SIZE;
+
+	// process InPipe
+	while (actual_transfer_count > 0) /* Loop to get all the pipe data elements */
+	{
+		pipe_data->pull(pipe_data->state,
+			local_pipe_buf,
+			PIPE_TRANSFER_SIZE,
+			&actual_transfer_count);
+		/* process the elements */
+		for (int i = 0; i < PIPE_TRANSFER_SIZE; i++)
+		{
+			local_pipe_buf[i]++;
+		}
+	}
+
+	// process OutPipe
+	pipe_data->push(pipe_data->state,
+		local_pipe_buf,
+		PIPE_TRANSFER_SIZE);
+	//TODO
 }

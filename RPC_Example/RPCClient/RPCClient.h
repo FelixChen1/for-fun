@@ -42,7 +42,7 @@ public:
         unsigned char *pFullChar);
     void InPipe(LONG_PIPE pipe_data);
     void OutPipe(LONG_PIPE *pipe_data);
-
+    void InOutPipe(CHAR_PIPE *pipe_data);
     bool Shutdown(void);
 
 private:

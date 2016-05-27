@@ -102,4 +102,7 @@ interface hello
 	typedef pipe long LONG_PIPE;
 	void InPipe( [in] LONG_PIPE pipe_data );
 	void OutPipe( [out] LONG_PIPE *pipe_data );
+	
+	typedef pipe char CHAR_PIPE;
+	void InOutPipe( [in, out] CHAR_PIPE *pipe_data );
 }

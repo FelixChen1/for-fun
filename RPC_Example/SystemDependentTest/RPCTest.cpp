@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <list>
 #include "..\global.h"
 #include "..\RPCServer\RPCServer.h"
 #include "..\RPCClient\RPCClient.h"
@@ -10,17 +11,20 @@ namespace SystemDependentTest
 {
     #define BUF_SIZE 50
     #define PIPE_SIZE 100
-    long *globalPipeData;
-    long globalBuffer[BUF_SIZE];
+    long *globalLongPipeData;
+    long globalLongBuffer[BUF_SIZE];
     char pipeDataIndex; /* state variable */
+
     int allocCount;
     int pullCount;
     int pushCount;
 
+	std::list<void*> memoryToFree;
+
     RPCServer server;
     RPCClient client;
 
-    void __RPC_USER PipeAlloc(char* stateInfo, unsigned long requestedSize, long **allocatedBuffer, unsigned long *allocatedSize)
+    void __RPC_USER PipeAllocLong(char* stateInfo, unsigned long requestedSize, long **allocatedBuffer, unsigned long *allocatedSize)
     {
         char *state = stateInfo;
         if (requestedSize > (BUF_SIZE * sizeof(long)))
@@ -31,11 +35,11 @@ namespace SystemDependentTest
         {
             *allocatedSize = requestedSize;
         }
-        *allocatedBuffer = globalBuffer;
+        *allocatedBuffer = globalLongBuffer;
         allocCount++;
     } //end PipeAlloc
 
-    void __RPC_USER PipePull(char* stateInfo, long *inputBuffer, unsigned long maxBufSize, unsigned long *sizeToSend)
+    void __RPC_USER PipePullLong(char* stateInfo, long *inputBuffer, unsigned long maxBufSize, unsigned long *sizeToSend)
     {
         small currentIndex;
         unsigned long i;
@@ -58,16 +62,16 @@ namespace SystemDependentTest
             for (i = 0; i < elementsToRead; i++)
             {
                 /*client sends data */
-                inputBuffer[i] = globalPipeData[i + currentIndex];
+                inputBuffer[i] = globalLongPipeData[i + currentIndex];
             }
 
             *state += elementsToRead;
             *sizeToSend = elementsToRead;
         }
         pullCount++;
-    }//end PipePull
+    }
 
-    void __RPC_USER PipePush(char *stateInfo,
+    void __RPC_USER PipePushLong(char *stateInfo,
         long *buffer,
         unsigned long numberOfElements)
     {
@@ -88,12 +92,92 @@ namespace SystemDependentTest
             for (int i = 0; i < elementsToCopy; i++)
             {
                 /*client receives data */
-                globalPipeData[*state] = buffer[i];
+				globalLongPipeData[*state] = buffer[i];
                 (*state)++;
             }
         }
         pushCount++;
-    }//end PipePush
+    }
+
+	template<typename T>
+	void __RPC_USER PipeAlloc(char *state, unsigned long bsize, T **buf, unsigned long *bcount)
+	{
+		if (bsize > (BUF_SIZE * sizeof(T)))
+		{
+			*bcount = BUF_SIZE * sizeof(T);
+		}
+		else
+		{
+			*bcount = bsize;
+		}
+
+		(*buf) = (T *)malloc(sizeof(T) * (*bcount));
+		memoryToFree.push_back(*buf);
+
+		for (int i = 0; i < (*bcount); i++)
+		{
+			(*buf)[i] = i;
+		}
+
+		allocCount++;
+	}
+
+	template<typename T>
+	void __RPC_USER PipePull(char* state, T *buffer, unsigned long esize, unsigned long *ecount)
+	{
+		unsigned long i;
+		byte elementsToRead;
+
+		if (*state >= PIPE_SIZE)
+		{
+			*ecount = 0; /* end of pipe data */
+			*state = 0; /* Reset the state = global index */
+		}
+		else
+		{
+			elementsToRead = esize > PIPE_SIZE ? PIPE_SIZE : esize;
+
+			for (int i = 0; i < elementsToRead; i++)
+			{
+				/*client sends data */
+				buffer[i] = i;
+			}
+
+			*state += elementsToRead;
+			*ecount = elementsToRead;
+		}
+		pullCount++;
+	}
+
+	template<typename T>
+	void __RPC_USER PipePush(char *state, T *buf, unsigned long ecount)
+	{
+		unsigned long elementsToCopy;
+		T local_pipe_data[PIPE_SIZE];
+		for (int i = 0; i < PIPE_SIZE; i++)
+		{
+			local_pipe_data[i] = 63;
+		}
+		if (ecount == 0)/* end of data */
+		{
+			*state = 0; /* Reset the state = global index */
+		}
+		else
+		{
+			if (*state + ecount > PIPE_SIZE)
+				elementsToCopy = PIPE_SIZE - *state;
+			else
+				elementsToCopy = ecount;
+
+			for (int i = 0; i < elementsToCopy; i++)
+			{
+				/*client receives data */
+				local_pipe_data[i] = buf[i];
+				(*state)++;
+			}
+		}
+		pushCount++;
+	}
 
     TEST_CLASS(RPCTest)
     {
@@ -111,11 +195,19 @@ namespace SystemDependentTest
         }
         TEST_METHOD_CLEANUP(TestMethodCleanUp)
         {
-            if (globalPipeData)
+            if (globalLongPipeData)
             {
-                free((void *)globalPipeData);
-                globalPipeData = nullptr;
+                free((void *)globalLongPipeData);
+				globalLongPipeData = nullptr;
             }
+			std::list<void*>::iterator it = memoryToFree.begin();
+			std::list<void*>::iterator end = memoryToFree.end();
+			while (it != end)
+			{
+				free((void *)(*it));
+				it++;
+			}
+			memoryToFree.clear();
         }
         TEST_METHOD(BaseTypeTest)
         {
@@ -354,17 +446,17 @@ namespace SystemDependentTest
             allocCount = 0;
             pullCount = 0;
 
-            globalPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
+			globalLongPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
 
             for (int i = 0; i < PIPE_SIZE; i++)
             {
-                globalPipeData[i] = 5;
+				globalLongPipeData[i] = 5;
             }
 
             pipeDataIndex = 0;
             inPipe.state = &pipeDataIndex;
-            inPipe.pull = PipePull;
-            inPipe.alloc = PipeAlloc;
+            inPipe.pull = PipePullLong;
+            inPipe.alloc = PipeAllocLong;
 
             client.InPipe(inPipe); /* Make the rpc */
 
@@ -378,21 +470,48 @@ namespace SystemDependentTest
             allocCount = 0;
             pushCount = 0;
 
-            globalPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
+			globalLongPipeData = (long *)malloc(sizeof(long) * PIPE_SIZE);
 
             pipeDataIndex = 0;
             outputPipe.state = &pipeDataIndex;
-            outputPipe.push = PipePush;
-            outputPipe.alloc = PipeAlloc;
+            outputPipe.push = PipePushLong;
+            outputPipe.alloc = PipeAllocLong;
 
             client.OutPipe(&outputPipe); /* Make the rpc */
             for (long i = 0; i < PIPE_SIZE; i++)
             {
-                Assert::AreEqual(i, globalPipeData[i]);
+                Assert::AreEqual(i, globalLongPipeData[i]);
             }
             Assert::AreEqual(3, allocCount);
             Assert::AreEqual(3, pushCount);
         }
+
+		TEST_METHOD(InOutPipeTest)
+		{
+			CHAR_PIPE pipe;
+			allocCount = 0;
+			pullCount = 0;
+
+			pipeDataIndex = 0;
+			pipe.state = &pipeDataIndex;
+			pipe.pull = PipePull<unsigned char>;
+			pipe.alloc = PipeAlloc<unsigned char>;
+			pipe.push = PipePush<unsigned char>;
+
+			RpcTryExcept
+			{
+				client.InOutPipe(&pipe); /* Make the rpc */
+			}
+			RpcExcept(1)
+			{
+				unsigned long ulCode = RpcExceptionCode();
+			}
+			RpcEndExcept
+			
+
+			Assert::AreEqual(3, allocCount);
+			Assert::AreEqual(3, pullCount);
+		}
 
         TEST_METHOD(ShutdownTest)
         {
