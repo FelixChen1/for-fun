@@ -144,19 +144,9 @@ void RPCClient::PointerTypeProc(
     ::PointerTypeProc(pReferenceChar, pUniqueChar, pFullChar);
 }
 
-void RPCClient::InPipe(LONG_PIPE pipe_data)
+void RPCClient::InOutPipe(CHAR_PIPE *pPipe)
 {
-    ::InPipe(pipe_data);
-}
-
-void RPCClient::OutPipe(LONG_PIPE *pipe_data)
-{
-    ::OutPipe(pipe_data);
-}
-
-void RPCClient::InOutPipe(CHAR_PIPE *pipe_data)
-{
-	::InOutPipe(pipe_data);
+	::InOutPipe(pPipe);
 }
 
 bool RPCClient::Shutdown(void)

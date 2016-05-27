@@ -35,6 +35,4 @@ void PointerTypeProc(
     unsigned char *pReferenceChar,
     unsigned char *pUniqueChar,
     unsigned char *pFullChar);
-void InPipe(LONG_PIPE long_pipe);
-void OutPipe(LONG_PIPE *outputPipe);
-void InOutPipe(CHAR_PIPE *pipe_data);
+void InOutPipe(CHAR_PIPE *pPipe);

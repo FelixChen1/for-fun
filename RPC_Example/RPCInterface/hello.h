@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Fri May 27 15:30:47 2016
+/* at Sat May 28 00:13:26 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -147,31 +147,6 @@ void PointerTypeProc(
     /* [unique][out][in] */ unsigned char *pUniqueChar,
     /* [string][full][out][in] */ unsigned char *pFullChar);
 
-typedef struct pipe_LONG_PIPE
-    {
-    void (__RPC_USER * pull) (
-        char * state,
-        long * buf,
-        unsigned long esize,
-        unsigned long * ecount );
-    void (__RPC_USER * push) (
-        char * state,
-        long * buf,
-        unsigned long ecount );
-    void (__RPC_USER * alloc) (
-        char * state,
-        unsigned long bsize,
-        long * * buf,
-        unsigned long * bcount );
-    char * state;
-    } 	LONG_PIPE;
-
-void InPipe( 
-    /* [in] */ LONG_PIPE pipe_data);
-
-void OutPipe( 
-    /* [out] */ LONG_PIPE *pipe_data);
-
 typedef struct pipe_CHAR_PIPE
     {
     void (__RPC_USER * pull) (
@@ -192,7 +167,7 @@ typedef struct pipe_CHAR_PIPE
     } 	CHAR_PIPE;
 
 void InOutPipe( 
-    /* [out][in] */ CHAR_PIPE *pipe_data);
+    /* [out][in] */ CHAR_PIPE *pPipe);
 
 
 extern handle_t hello_IfHandle;

@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Fri May 27 15:30:47 2016
+/* at Sat May 28 00:13:26 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -34,8 +34,8 @@
 #include <string.h>
 #include "hello.h"
 
-#define TYPE_FORMAT_STRING_SIZE   249                               
-#define PROC_FORMAT_STRING_SIZE   547                               
+#define TYPE_FORMAT_STRING_SIZE   225                               
+#define PROC_FORMAT_STRING_SIZE   487                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -522,13 +522,13 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 452 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
 /* 454 */	NdrFcShort( 0xce ),	/* Type Offset=206 */
 
-	/* Procedure InPipe */
+	/* Procedure InOutPipe */
 
 /* 456 */	0x32,		/* FC_BIND_PRIMITIVE */
 			0x48,		/* Old Flags:  */
 /* 458 */	NdrFcLong( 0x0 ),	/* 0 */
 /* 462 */	NdrFcShort( 0xa ),	/* 10 */
-/* 464 */	NdrFcShort( 0x10 ),	/* x86 Stack size/offset = 16 */
+/* 464 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
 /* 466 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 468 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 470 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
@@ -539,57 +539,11 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 476 */	NdrFcShort( 0x0 ),	/* 0 */
 /* 478 */	NdrFcShort( 0x0 ),	/* 0 */
 
-	/* Parameter pipe_data */
+	/* Parameter pPipe */
 
-/* 480 */	NdrFcShort( 0xc ),	/* Flags:  pipe, in, */
+/* 480 */	NdrFcShort( 0x11c ),	/* Flags:  pipe, in, out, simple ref, */
 /* 482 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
-/* 484 */	NdrFcShort( 0xd4 ),	/* Type Offset=212 */
-
-	/* Procedure OutPipe */
-
-/* 486 */	0x32,		/* FC_BIND_PRIMITIVE */
-			0x48,		/* Old Flags:  */
-/* 488 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 492 */	NdrFcShort( 0xb ),	/* 11 */
-/* 494 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 496 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 498 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 500 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
-			0x1,		/* 1 */
-/* 502 */	0x8,		/* 8 */
-			0x1,		/* Ext Flags:  new corr desc, */
-/* 504 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 506 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 508 */	NdrFcShort( 0x0 ),	/* 0 */
-
-	/* Parameter pipe_data */
-
-/* 510 */	NdrFcShort( 0x4114 ),	/* Flags:  pipe, out, simple ref, srv alloc size=16 */
-/* 512 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
-/* 514 */	NdrFcShort( 0xe2 ),	/* Type Offset=226 */
-
-	/* Procedure InOutPipe */
-
-/* 516 */	0x32,		/* FC_BIND_PRIMITIVE */
-			0x48,		/* Old Flags:  */
-/* 518 */	NdrFcLong( 0x0 ),	/* 0 */
-/* 522 */	NdrFcShort( 0xc ),	/* 12 */
-/* 524 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
-/* 526 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 528 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 530 */	0x48,		/* Oi2 Flags:  has pipes, has ext, */
-			0x1,		/* 1 */
-/* 532 */	0x8,		/* 8 */
-			0x1,		/* Ext Flags:  new corr desc, */
-/* 534 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 536 */	NdrFcShort( 0x0 ),	/* 0 */
-/* 538 */	NdrFcShort( 0x0 ),	/* 0 */
-
-	/* Parameter pipe_data */
-
-/* 540 */	NdrFcShort( 0x11c ),	/* Flags:  pipe, in, out, simple ref, */
-/* 542 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
-/* 544 */	NdrFcShort( 0xf0 ),	/* Type Offset=240 */
+/* 484 */	NdrFcShort( 0xd8 ),	/* Type Offset=216 */
 
 			0x0
         }
@@ -752,33 +706,16 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /* 208 */	
 			0x22,		/* FC_C_CSTRING */
 			0x5c,		/* FC_PAD */
-/* 210 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/* 212 */	0xb5,		/* FC_PIPE */
-			0x3,		/* 3 */
-/* 214 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (210) */
-/* 216 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 218 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 220 */	
-			0x11, 0x4,	/* FC_RP [alloced_on_stack] */
-/* 222 */	NdrFcShort( 0x4 ),	/* Offset= 4 (226) */
-/* 224 */	0x8,		/* FC_LONG */
-			0x5c,		/* FC_PAD */
-/* 226 */	0xb5,		/* FC_PIPE */
-			0x3,		/* 3 */
-/* 228 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (224) */
-/* 230 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 232 */	NdrFcShort( 0x4 ),	/* 4 */
-/* 234 */	
+/* 210 */	
 			0x11, 0x0,	/* FC_RP */
-/* 236 */	NdrFcShort( 0x4 ),	/* Offset= 4 (240) */
-/* 238 */	0x2,		/* FC_CHAR */
+/* 212 */	NdrFcShort( 0x4 ),	/* Offset= 4 (216) */
+/* 214 */	0x2,		/* FC_CHAR */
 			0x5c,		/* FC_PAD */
-/* 240 */	0xb5,		/* FC_PIPE */
+/* 216 */	0xb5,		/* FC_PIPE */
 			0x0,		/* 0 */
-/* 242 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (238) */
-/* 244 */	NdrFcShort( 0x1 ),	/* 1 */
-/* 246 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 218 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (214) */
+/* 220 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 222 */	NdrFcShort( 0x1 ),	/* 1 */
 
 			0x0
         }
@@ -818,9 +755,7 @@ static const unsigned short hello_FormatStringOffsetTable[] =
     324,
     366,
     414,
-    456,
-    486,
-    516
+    456
     };
 
 
@@ -867,13 +802,11 @@ static const RPC_DISPATCH_FUNCTION hello_table[] =
     NdrServerCall2,
     NdrServerCall2,
     NdrServerCall2,
-    NdrServerCall2,
-    NdrServerCall2,
     0
     };
 static const RPC_DISPATCH_TABLE hello_v1_0_DispatchTable = 
     {
-    13,
+    11,
     (RPC_DISPATCH_FUNCTION*)hello_table
     };
 
@@ -889,8 +822,6 @@ static const SERVER_ROUTINE hello_ServerRoutineTable[] =
     (SERVER_ROUTINE)VaryingArrayProc,
     (SERVER_ROUTINE)ConformantArrayProc,
     (SERVER_ROUTINE)PointerTypeProc,
-    (SERVER_ROUTINE)InPipe,
-    (SERVER_ROUTINE)OutPipe,
     (SERVER_ROUTINE)InOutPipe
     };
 
