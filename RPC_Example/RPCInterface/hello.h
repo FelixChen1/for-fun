@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sat May 28 00:13:26 2016
+/* at Sun May 29 13:54:03 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -176,6 +176,22 @@ extern handle_t hello_IfHandle;
 extern RPC_IF_HANDLE hello_v1_0_c_ifspec;
 extern RPC_IF_HANDLE hello_v1_0_s_ifspec;
 #endif /* __hello_INTERFACE_DEFINED__ */
+
+#ifndef __aux_INTERFACE_DEFINED__
+#define __aux_INTERFACE_DEFINED__
+
+/* interface aux */
+/* [version][uuid] */ 
+
+void GetTime( 
+    /* [in] */ handle_t IDL_handle,
+    /* [out] */ long long *timeData);
+
+
+
+extern RPC_IF_HANDLE aux_v1_0_c_ifspec;
+extern RPC_IF_HANDLE aux_v1_0_s_ifspec;
+#endif /* __aux_INTERFACE_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
 

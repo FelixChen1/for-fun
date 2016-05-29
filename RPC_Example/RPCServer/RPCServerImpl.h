@@ -36,3 +36,5 @@ void PointerTypeProc(
     unsigned char *pUniqueChar,
     unsigned char *pFullChar);
 void InOutPipe(CHAR_PIPE *pPipe);
+
+void GetTime(handle_t IDL_handle, long long *timeData);

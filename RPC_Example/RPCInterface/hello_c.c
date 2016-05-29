@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sat May 28 00:13:26 2016
+/* at Sun May 29 13:54:03 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -35,8 +35,8 @@
 
 #include "hello.h"
 
-#define TYPE_FORMAT_STRING_SIZE   225                               
-#define PROC_FORMAT_STRING_SIZE   487                               
+#define TYPE_FORMAT_STRING_SIZE   229                               
+#define PROC_FORMAT_STRING_SIZE   521                               
 #define EXPR_FORMAT_STRING_SIZE   1                                 
 #define TRANSMIT_AS_TABLE_SIZE    0            
 #define WIRE_MARSHAL_TABLE_SIZE   0            
@@ -255,6 +255,43 @@ void InOutPipe(
                   ( PMIDL_STUB_DESC  )&hello_StubDesc,
                   (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[456],
                   ( unsigned char * )&pPipe);
+    
+}
+
+
+/* Standard interface: aux, ver. 1.0,
+   GUID={0x23df7a88,0xf51b,0x43b2,{0xbe,0xd5,0x6c,0xdd,0xe3,0xf7,0xa8,0xbc}} */
+
+
+
+static const RPC_CLIENT_INTERFACE aux___RpcClientInterface =
+    {
+    sizeof(RPC_CLIENT_INTERFACE),
+    {{0x23df7a88,0xf51b,0x43b2,{0xbe,0xd5,0x6c,0xdd,0xe3,0xf7,0xa8,0xbc}},{1,0}},
+    {{0x8A885D04,0x1CEB,0x11C9,{0x9F,0xE8,0x08,0x00,0x2B,0x10,0x48,0x60}},{2,0}},
+    0,
+    0,
+    0,
+    0,
+    0,
+    0x00000000
+    };
+RPC_IF_HANDLE aux_v1_0_c_ifspec = (RPC_IF_HANDLE)& aux___RpcClientInterface;
+
+extern const MIDL_STUB_DESC aux_StubDesc;
+
+static RPC_BINDING_HANDLE aux__MIDL_AutoBindHandle;
+
+
+void GetTime( 
+    /* [in] */ handle_t IDL_handle,
+    /* [out] */ long long *timeData)
+{
+
+    NdrClientCall2(
+                  ( PMIDL_STUB_DESC  )&aux_StubDesc,
+                  (PFORMAT_STRING) &hello__MIDL_ProcFormatString.Format[486],
+                  ( unsigned char * )&IDL_handle);
     
 }
 
@@ -700,6 +737,33 @@ static const hello_MIDL_PROC_FORMAT_STRING hello__MIDL_ProcFormatString =
 /* 482 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
 /* 484 */	NdrFcShort( 0xd8 ),	/* Type Offset=216 */
 
+	/* Procedure GetTime */
+
+/* 486 */	0x0,		/* 0 */
+			0x48,		/* Old Flags:  */
+/* 488 */	NdrFcLong( 0x0 ),	/* 0 */
+/* 492 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 494 */	NdrFcShort( 0x8 ),	/* x86 Stack size/offset = 8 */
+/* 496 */	0x32,		/* FC_BIND_PRIMITIVE */
+			0x0,		/* 0 */
+/* 498 */	NdrFcShort( 0x0 ),	/* x86 Stack size/offset = 0 */
+/* 500 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 502 */	NdrFcShort( 0x24 ),	/* 36 */
+/* 504 */	0x40,		/* Oi2 Flags:  has ext, */
+			0x1,		/* 1 */
+/* 506 */	0x8,		/* 8 */
+			0x1,		/* Ext Flags:  new corr desc, */
+/* 508 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 510 */	NdrFcShort( 0x0 ),	/* 0 */
+/* 512 */	NdrFcShort( 0x0 ),	/* 0 */
+
+	/* Parameter IDL_handle */
+
+/* 514 */	NdrFcShort( 0x2150 ),	/* Flags:  out, base type, simple ref, srv alloc size=8 */
+/* 516 */	NdrFcShort( 0x4 ),	/* x86 Stack size/offset = 4 */
+/* 518 */	0xb,		/* FC_HYPER */
+			0x0,		/* 0 */
+
 			0x0
         }
     };
@@ -871,6 +935,10 @@ static const hello_MIDL_TYPE_FORMAT_STRING hello__MIDL_TypeFormatString =
 /* 218 */	NdrFcShort( 0xfffc ),	/* Offset= -4 (214) */
 /* 220 */	NdrFcShort( 0x1 ),	/* 1 */
 /* 222 */	NdrFcShort( 0x1 ),	/* 1 */
+/* 224 */	
+			0x11, 0xc,	/* FC_RP [alloced_on_stack] [simple_pointer] */
+/* 226 */	0xb,		/* FC_HYPER */
+			0x5c,		/* FC_PAD */
 
 			0x0
         }
@@ -972,6 +1040,36 @@ static const MIDL_SERVER_INFO hello_ServerInfo =
     0,
     0,
     0};
+
+static const unsigned short aux_FormatStringOffsetTable[] =
+    {
+    486
+    };
+
+
+static const MIDL_STUB_DESC aux_StubDesc = 
+    {
+    (void *)& aux___RpcClientInterface,
+    MIDL_user_allocate,
+    MIDL_user_free,
+    &aux__MIDL_AutoBindHandle,
+    0,
+    0,
+    ExprEvalRoutines,
+    0,
+    hello__MIDL_TypeFormatString.Format,
+    1, /* -error bounds_check flag */
+    0x50002, /* Ndr library version */
+    0,
+    0x800025b, /* MIDL Version 8.0.603 */
+    0,
+    0,
+    0,  /* notify & notify_flag routine table */
+    0x1, /* MIDL flag */
+    0, /* cs routines */
+    0,   /* proxy/server info */
+    0
+    };
 #pragma optimize("", on )
 #if _MSC_VER >= 1200
 #pragma warning(pop)

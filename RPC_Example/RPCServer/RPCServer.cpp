@@ -26,22 +26,23 @@ bool RPCServer::InitRPCServer()
         RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
         pszEndpoint,
         pszSecurity);
-
     if (status)
     {
         return false;
     }
 
-    // hello_v1_0_s_ifspec is found from <interface-name>_s.c
     status = RpcServerRegisterIf(hello_v1_0_s_ifspec, NULL, NULL);
-
+    if (status)
+    {
+        return false;
+    }
+    status = RpcServerRegisterIf(aux_v1_0_s_ifspec, NULL, NULL);
     if (status)
     {
         return false;
     }
 
     status = RpcServerListen(cMinCalls, RPC_C_LISTEN_MAX_CALLS_DEFAULT, fDontWait);
-
     if (status)
     {
         return false;

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <time.h>
 #include "..\RPCInterface\hello.h"
 #include "RPCServerImpl.h"
 
@@ -213,4 +214,9 @@ void InOutPipe(CHAR_PIPE *pPipe)
         pPipe->push(pPipe->state, &(local_pipe_buf[index]), elementsToSend);
         index += elementsToSend;
     }
+}
+
+void GetTime(handle_t IDL_handle, long long *timeData)
+{
+    time(reinterpret_cast<time_t *>(timeData));
 }

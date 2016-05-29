@@ -102,3 +102,11 @@ interface hello
 	typedef pipe char CHAR_PIPE;
 	void InOutPipe( [in, out] CHAR_PIPE *pPipe );
 }
+[
+	uuid(23df7a88-f51b-43b2-bed5-6cdde3f7a8bc),
+	version(1.0)
+]
+interface aux
+{
+	void GetTime([out] long long *timeData);
+}

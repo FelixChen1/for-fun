@@ -43,6 +43,7 @@ public:
     void InOutPipe(CHAR_PIPE *pipe_data);
     bool Shutdown(void);
 
+    void GetTime(long long *timeData);
 private:
     unsigned char * pszUuid;
     unsigned char * pszProtocolSequence;

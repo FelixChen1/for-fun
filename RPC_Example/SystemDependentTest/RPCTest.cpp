@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "CppUnitTest.h"
+#include <time.h>
 #include <list>
 #include "..\global.h"
 #include "..\RPCServer\RPCServer.h"
@@ -377,7 +378,18 @@ namespace SystemDependentTest
 			Assert::AreEqual(6, allocCount);
 			Assert::AreEqual(3, pullCount);
             Assert::AreEqual(3, pushCount);
-		}
+        }
+
+        TEST_METHOD(TwoInterfaceTest)
+        {
+            time_t timeData;
+            client.GetTime(reinterpret_cast<long long *>(&timeData));
+
+            time_t timeDataExpected;
+            time(&timeDataExpected);
+
+            Assert::IsTrue(timeDataExpected - timeData == 0);
+        }
 
         TEST_METHOD(ShutdownTest)
         {

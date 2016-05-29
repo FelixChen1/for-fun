@@ -154,3 +154,8 @@ bool RPCClient::Shutdown(void)
     ::Shutdown();
     return true;
 }
+
+void RPCClient::GetTime(long long *timeData)
+{
+    ::GetTime(hello_IfHandle, timeData);
+}
