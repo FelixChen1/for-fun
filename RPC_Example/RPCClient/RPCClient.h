@@ -44,6 +44,10 @@ public:
     bool Shutdown(void);
 
     void GetTime(long long *timeData);
+
+    short RemoteOpen(PPCONTEXT_HANDLE_TYPE pphContext, unsigned char *pszFileName);
+    short RemoteRead(PCONTEXT_HANDLE_TYPE phContext, unsigned char achBuf[], short *pcbBuf);
+    void RemoteClose(PPCONTEXT_HANDLE_TYPE pphContext);
 private:
     unsigned char * pszUuid;
     unsigned char * pszProtocolSequence;

@@ -38,3 +38,8 @@ void PointerTypeProc(
 void InOutPipe(CHAR_PIPE *pPipe);
 
 void GetTime(handle_t IDL_handle, long long *timeData);
+
+short RemoteOpen(PPCONTEXT_HANDLE_TYPE pphContext, unsigned char *pszFileName);
+short RemoteRead(PCONTEXT_HANDLE_TYPE phContext, unsigned char achBuf[], short *pcbBuf);
+void RemoteClose(PPCONTEXT_HANDLE_TYPE pphContext);
+void __RPC_USER PCONTEXT_HANDLE_TYPE_rundown(PCONTEXT_HANDLE_TYPE phContext);

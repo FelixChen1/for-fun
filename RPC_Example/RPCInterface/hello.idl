@@ -101,6 +101,19 @@ interface hello
 	
 	typedef pipe char CHAR_PIPE;
 	void InOutPipe( [in, out] CHAR_PIPE *pPipe );
+	
+	typedef [context_handle] void * PCONTEXT_HANDLE_TYPE;
+	typedef [ref] PCONTEXT_HANDLE_TYPE * PPCONTEXT_HANDLE_TYPE;
+	 
+	short RemoteOpen([out] PPCONTEXT_HANDLE_TYPE pphContext,
+		[in, string] unsigned char * pszFileName);
+	 
+	short RemoteRead(
+		[in] PCONTEXT_HANDLE_TYPE phContext,
+		[out, size_is(*pcbBuf)] unsigned char achBuf[],
+		[in, out] short *pcbBuf);
+	 
+	void RemoteClose([in, out] PPCONTEXT_HANDLE_TYPE pphContext);
 }
 [
 	uuid(23df7a88-f51b-43b2-bed5-6cdde3f7a8bc),

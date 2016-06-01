@@ -19,9 +19,6 @@ namespace SystemDependentTest
 
 	std::list<void*> memoryToFree;
 
-    RPCServer server;
-    RPCClient client;
-
 	template<typename T>
 	void __RPC_USER PipeAlloc(char *state, unsigned long bsize, T **buf, unsigned long *bcount)
 	{
@@ -102,17 +99,19 @@ namespace SystemDependentTest
 
     TEST_CLASS(RPCTest)
     {
+        RPCServer server;
+        RPCClient client;
     public:
         TEST_CLASS_INITIALIZE(TestClassInitialize)
         {
-            server.InitRPCServer();
-            client.InitRPCClient();
         }
         TEST_CLASS_CLEANUP(TestClassCleanUp)
         {
         }
         TEST_METHOD_INITIALIZE(TestMethodInitialize)
         {
+            server.InitRPCServer();
+            client.InitRPCClient();
         }
         TEST_METHOD_CLEANUP(TestMethodCleanUp)
         {
@@ -127,6 +126,7 @@ namespace SystemDependentTest
                 }
                 memoryToFree.clear();
             }
+            //client.Shutdown();
         }
 
         TEST_METHOD(BaseTypeTest)
@@ -391,8 +391,43 @@ namespace SystemDependentTest
             Assert::IsTrue(timeDataExpected - timeData == 0);
         }
 
+        TEST_METHOD(ContextHandleTest)
+        {
+            PCONTEXT_HANDLE_TYPE phContext = nullptr;
+            unsigned char *pszFileName = reinterpret_cast<unsigned char *>("testContextHandleTest.dat");
+            const int FILE_SIZE = 1024;
+            const int BUFFER_SIZE = 256;
+            Assert::IsTrue(client.RemoteOpen(&phContext, pszFileName) == 0);
+            Assert::IsTrue(nullptr != phContext);
+
+            unsigned char achBuf[BUFFER_SIZE];
+            short cbBuf = BUFFER_SIZE;
+            unsigned char expected = 63;
+            int count = 0;
+            do
+            {
+                short ret = client.RemoteRead(phContext, achBuf, &cbBuf);
+                Assert::AreEqual(ret, cbBuf);
+                for (int i = 0; i < cbBuf; i++)
+                {
+                    Assert::AreEqual(expected, achBuf[i]);
+                    count++;
+                }
+            } while (cbBuf);
+            Assert::AreEqual(FILE_SIZE, count);
+
+            client.RemoteClose(&phContext);
+            Assert::IsTrue(nullptr == phContext);
+        }
+
+        TEST_METHOD(ContextHandleWithRunDownRoutineTest)
+        {
+            // TO DO
+        }
+
         TEST_METHOD(ShutdownTest)
         {
+            // TO DO
         }
     };
 

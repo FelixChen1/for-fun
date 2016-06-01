@@ -159,3 +159,18 @@ void RPCClient::GetTime(long long *timeData)
 {
     ::GetTime(hello_IfHandle, timeData);
 }
+
+short RPCClient::RemoteOpen(PPCONTEXT_HANDLE_TYPE pphContext, unsigned char *pszFileName)
+{
+    return ::RemoteOpen(pphContext, pszFileName);
+}
+
+short RPCClient::RemoteRead(PCONTEXT_HANDLE_TYPE phContext, unsigned char achBuf[], short *pcbBuf)
+{
+    return ::RemoteRead(phContext, achBuf, pcbBuf);
+}
+
+void RPCClient::RemoteClose(PPCONTEXT_HANDLE_TYPE pphContext)
+{
+    ::RemoteClose(pphContext);
+}

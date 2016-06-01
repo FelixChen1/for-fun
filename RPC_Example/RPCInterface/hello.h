@@ -4,7 +4,7 @@
 
 
  /* File created by MIDL compiler version 8.00.0603 */
-/* at Sun May 29 13:54:03 2016
+/* at Wed Jun 01 23:35:58 2016
  */
 /* Compiler settings for hello.idl:
     Oicf, W1, Zp8, env=Win32 (32b run), target_arch=X86 8.00.0603 
@@ -169,6 +169,22 @@ typedef struct pipe_CHAR_PIPE
 void InOutPipe( 
     /* [out][in] */ CHAR_PIPE *pPipe);
 
+typedef /* [context_handle] */ void *PCONTEXT_HANDLE_TYPE;
+
+typedef /* [ref] */ PCONTEXT_HANDLE_TYPE *PPCONTEXT_HANDLE_TYPE;
+
+short RemoteOpen( 
+    /* [out] */ PPCONTEXT_HANDLE_TYPE pphContext,
+    /* [string][in] */ unsigned char *pszFileName);
+
+short RemoteRead( 
+    /* [in] */ PCONTEXT_HANDLE_TYPE phContext,
+    /* [size_is][out] */ unsigned char achBuf[  ],
+    /* [out][in] */ short *pcbBuf);
+
+void RemoteClose( 
+    /* [out][in] */ PPCONTEXT_HANDLE_TYPE pphContext);
+
 
 extern handle_t hello_IfHandle;
 
@@ -194,6 +210,8 @@ extern RPC_IF_HANDLE aux_v1_0_s_ifspec;
 #endif /* __aux_INTERFACE_DEFINED__ */
 
 /* Additional Prototypes for ALL interfaces */
+
+void __RPC_USER PCONTEXT_HANDLE_TYPE_rundown( PCONTEXT_HANDLE_TYPE );
 
 /* end of Additional Prototypes */
 

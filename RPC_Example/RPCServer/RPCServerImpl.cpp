@@ -220,3 +220,72 @@ void GetTime(handle_t IDL_handle, long long *timeData)
 {
     time(reinterpret_cast<time_t *>(timeData));
 }
+
+typedef struct
+{
+    FILE* hFile;
+    char   achFile[256];
+} FILE_CONTEXT_TYPE;
+
+short RemoteOpen(PPCONTEXT_HANDLE_TYPE pphContext, unsigned char *pszFileName)
+{
+    FILE               *hFile;
+    FILE_CONTEXT_TYPE  *pFileContext;
+    const char *pcsFileName = reinterpret_cast<const char *>(pszFileName);
+
+    if ((hFile = fopen(pcsFileName, "r")) == NULL)
+    {
+        *pphContext = (PCONTEXT_HANDLE_TYPE)NULL;
+        return(-1);
+    }
+    else
+    {
+        pFileContext = (FILE_CONTEXT_TYPE *)MIDL_user_allocate(sizeof(FILE_CONTEXT_TYPE));
+        pFileContext->hFile = hFile;
+        // check if pszFileName is longer than 256 and if yes, return
+        // an error
+        size_t length = strlen(pcsFileName);
+        strcpy_s(pFileContext->achFile, strlen(pcsFileName) + 1, pcsFileName);
+        *pphContext = (PCONTEXT_HANDLE_TYPE)pFileContext;
+        return(0);
+    }
+}
+
+short RemoteRead(PCONTEXT_HANDLE_TYPE phContext, unsigned char achBuf[], short *pcbBuf)
+{
+    FILE_CONTEXT_TYPE *pFileContext;
+    short bufSize = *pcbBuf;
+
+    pFileContext = (FILE_CONTEXT_TYPE *)phContext;
+    long pos = ftell(pFileContext->hFile);
+    *pcbBuf = (short)fread(achBuf,
+        sizeof(char),
+        bufSize,
+        pFileContext->hFile);
+    pos = ftell(pFileContext->hFile);
+    return *pcbBuf;
+}
+
+void RemoteClose(PPCONTEXT_HANDLE_TYPE pphContext)
+{
+    FILE_CONTEXT_TYPE *pFileContext;
+
+    if (*pphContext == NULL)
+    {
+        //Log error, client tried to close a NULL handle.
+        return;
+    }
+    pFileContext = (FILE_CONTEXT_TYPE *)*pphContext;
+
+    fclose(pFileContext->hFile);
+    MIDL_user_free(pFileContext);
+
+    // This tells the run-time, when it is marshalling the out 
+    // parameters, that the context handle has been closed normally.
+    *pphContext = NULL;
+}
+
+void __RPC_USER PCONTEXT_HANDLE_TYPE_rundown(PCONTEXT_HANDLE_TYPE phContext)
+{
+    RemoteClose(&phContext);
+}
