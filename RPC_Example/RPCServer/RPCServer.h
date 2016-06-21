@@ -1,6 +1,8 @@
 #pragma once
+#include <list>
 #include "..\global.h"
 #include "..\RPCInterface\hello.h"
+#include "..\spn.h"
 
 class RPC_API RPCServer
 {
@@ -8,28 +10,22 @@ public:
     RPCServer();
     ~RPCServer();
 
-    bool InitRPCServer();
+    bool InitRPCServer(SpnParam *spnParam,
+        AuthInfoParam *authInfoParam,
+        ProtocalSeqParam *protSeqParam,
+        InterfaceParam *ifParam,
+        ListenParam *listenParam);
 
-    void HelloProc(unsigned char * pszString);
-    void BaseType(
-        /* [out][in] */ boolean *pBoolean,
-        /* [out][in] */ byte *pByte,
-        /* [out][in] */ unsigned char *pChar,
-        /* [out][in] */ double *pDouble,
-        /* [out][in] */ float *pFloat,
-        /* [out][in] */ hyper *pHyper,
-        /* [out][in] */ int *pInt,
-        /* [out][in] */ __int3264 *pInt3264,
-        /* [out][in] */ long *pLong,
-        /* [out][in] */ short *pShort,
-        /* [out][in] */ small *pSmall,
-        /* [out][in] */ wchar_t *pWchar_t);
-    void Shutdown(void);
+    void RegisterInterfaces(std::list<InterfaceParam> ifParamList);
+    void **GetPrimaryHandle();
+    void **GetSecondaryHandle();
+
 private:
-    unsigned char * pszProtocolSequence;
-    unsigned char * pszSecurity;
-    unsigned char * pszEndpoint;
-    unsigned int    cMinCalls;
-    unsigned int    fDontWait;
+    bool MakeSpn(SpnParam *spnParam);
+    bool RegisterAuthInfo(AuthInfoParam *authInfoParam);
+    bool UseProtseqEp(ProtocalSeqParam *protSeqParam);
+    bool Listen(ListenParam *listenParam);
+    void **primaryHandle;
+    void **secondaryHandle;
 };
 

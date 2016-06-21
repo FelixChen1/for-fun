@@ -1,62 +1,116 @@
 #include <iostream>
 #include "RPCClient.h"
 #include "RPCClientImpl.h"
+#include <dsparse.h>
 
 RPCClient::RPCClient()
 {
-    pszUuid = NULL;
-    pszProtocolSequence = reinterpret_cast<unsigned char*>("ncacn_np");
-    pszNetworkAddress = NULL;
-    pszEndpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
-    pszOptions = NULL;
-    pszStringBinding = NULL;
+    primaryHandle = &hello_IfHandle;
     bInitialized = false;
 }
 
 RPCClient::~RPCClient()
 {
     RPC_STATUS status;
-    if (pszStringBinding)
-    {
-        status = RpcStringFree(&pszStringBinding);
-        if (status)
-        {
-            std::cout << "FAILED to free RPC binding string: " << pszStringBinding << std::endl;
-            std::cout << "Error code: " << status << "." << std::endl;
-        }
-    }
 
-    status = RpcBindingFree(&hello_IfHandle);
+    status = RpcBindingFree(primaryHandle);
     if (status)
     {
         std::cout << "FAILED to free RPC binding, error code " << status << "." << std::endl;
     }
 }
 
-void RPCClient::InitRPCClient()
+void RPCClient::InitRPCClient(ClientBindingParam *bindingParam, SpnParam *spnParam, ClientAuthInfoParam* authInfoParam)
 {
     RPC_STATUS status;
 
-    status = RpcStringBindingCompose(pszUuid,
-        pszProtocolSequence,
-        pszNetworkAddress,
-        pszEndpoint,
-        pszOptions,
-        &pszStringBinding);
-    if (status)
+    if (bindingParam)
     {
-        return;
+        if (RpcStringBindingCompose(bindingParam->objUuid,
+            bindingParam->protSeq,
+            bindingParam->networkAddress,
+            bindingParam->endpoint,
+            bindingParam->options,
+            &(bindingParam->stringBinding)))
+        {
+            return;
+        }
+
+        if (RpcBindingFromStringBinding(bindingParam->stringBinding, authInfoParam->binding))
+        {
+            return;
+        }
+
+        status = RpcStringFree(&(bindingParam->stringBinding));
+        if (status)
+        {
+            std::cout << "FAILED to free RPC binding string: " << bindingParam->stringBinding << std::endl;
+            std::cout << "Error code: " << status << "." << std::endl;
+        }
     }
 
-    // hello_IfHandle is found from <interface-name>_c.c
-    status = RpcBindingFromStringBinding(pszStringBinding, &hello_IfHandle);
-
-    if (status)
+    if (spnParam)
     {
-        return;
+        if (!MakeSpn(spnParam))
+        {
+            return;
+        }
     }
+
+    if (authInfoParam)
+    {
+        if (!SetAuthInfo(authInfoParam))
+        {
+            return;
+        }
+    }
+
     bInitialized = true;
 }
+
+bool RPCClient::MakeSpn(SpnParam *spnParam)
+{
+    bool result = false;
+    if (spnParam)
+    {
+        if (!DsMakeSpn(spnParam->serviceClass,
+            spnParam->serviceName,
+            spnParam->instanceName,
+            spnParam->instancePort,
+            spnParam->referrer,
+            &(spnParam->spnLength),
+            spnParam->spn))
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool RPCClient::SetAuthInfo(ClientAuthInfoParam *authInfoParam)
+{
+    bool result = false;
+    if (authInfoParam)
+    {
+        if (!RpcBindingSetAuthInfo(
+            *authInfoParam->binding,
+            authInfoParam->spn,
+            authInfoParam->authnLevel,
+            authInfoParam->authnService,
+            authInfoParam->authIdentity,
+            authInfoParam->authzService))
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+void **RPCClient::GetPrimaryHandle()
+{
+    return primaryHandle;
+}
+
 void RPCClient::HelloProc(unsigned char * pszString)
 {
     RpcTryExcept

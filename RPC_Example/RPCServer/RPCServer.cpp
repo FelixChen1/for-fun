@@ -1,49 +1,52 @@
 #include "RPCServer.h"
 #include "RPCServerImpl.h"
+#include <dsparse.h>
 
 RPCServer::RPCServer()
 {
-    pszProtocolSequence = reinterpret_cast<unsigned char*>("ncacn_np");
-    pszSecurity = NULL;
-    pszEndpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
-    cMinCalls = 1;
-    fDontWait = TRUE;
+    primaryHandle = &hello_v1_0_s_ifspec;
+    secondaryHandle = &aux_v1_0_s_ifspec;
 }
 
 RPCServer::~RPCServer()
 {
 }
 
-bool RPCServer::InitRPCServer()
+bool RPCServer::InitRPCServer(SpnParam *spnParam,
+    AuthInfoParam *authInfoParam,
+    ProtocalSeqParam *protSeqParam,
+    InterfaceParam *ifParam,
+    ListenParam *listenParam)
 {
     RPC_STATUS status;
 
-    // there are typo error in website:
-    // https://msdn.microsoft.com/en-us/library/windows/desktop/aa378869%28v=vs.85%29.aspx?f=255&MSPPError=-2147217396
-    // that the second parameter should be RPC_C_PROTSEQ_MAX_REQS_DEFAULT
-    // NOT RPC_C_LISTEN_MAX_CALLS_DEFAULT which is used in "Listen" step.
-    status = RpcServerUseProtseqEp(pszProtocolSequence,
-        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,
-        pszEndpoint,
-        pszSecurity);
-    if (status)
+    if (!MakeSpn(spnParam))
     {
         return false;
     }
 
-    status = RpcServerRegisterIf(hello_v1_0_s_ifspec, NULL, NULL);
-    if (status)
-    {
-        return false;
-    }
-    status = RpcServerRegisterIf(aux_v1_0_s_ifspec, NULL, NULL);
-    if (status)
+    if (!RegisterAuthInfo(authInfoParam))
     {
         return false;
     }
 
-    status = RpcServerListen(cMinCalls, RPC_C_LISTEN_MAX_CALLS_DEFAULT, fDontWait);
-    if (status)
+    if (!UseProtseqEp(protSeqParam))
+    {
+        return false;
+    }
+
+    if (!ifParam)
+    {
+        return false;
+    }
+    else
+    {
+        std::list<InterfaceParam> ifParams;
+        ifParams.push_back(*ifParam);
+        RegisterInterfaces(ifParams);
+    }
+    
+    if (!Listen(listenParam))
     {
         return false;
     }
@@ -51,29 +54,95 @@ bool RPCServer::InitRPCServer()
     return true;
 }
 
-void RPCServer::HelloProc(unsigned char * pszString)
+
+void RPCServer::RegisterInterfaces(std::list<InterfaceParam> ifParamList)
 {
-    ::HelloProc(pszString);
+    for (InterfaceParam ifParam : ifParamList)
+    {
+        if (!RpcServerRegisterIf(*ifParam.interfaceHandle,
+            (UUID *)(ifParam.managerTypeUuid),
+            ifParam.managerEpv))
+        {
+            return;
+        }
+    }
 }
 
-void RPCServer::BaseType(
-    /* [out][in] */ boolean *pBoolean,
-    /* [out][in] */ byte *pByte,
-    /* [out][in] */ unsigned char *pChar,
-    /* [out][in] */ double *pDouble,
-    /* [out][in] */ float *pFloat,
-    /* [out][in] */ hyper *pHyper,
-    /* [out][in] */ int *pInt,
-    /* [out][in] */ __int3264 *pInt3264,
-    /* [out][in] */ long *pLong,
-    /* [out][in] */ short *pShort,
-    /* [out][in] */ small *pSmall,
-    /* [out][in] */ wchar_t *pWchar_t)
+void **RPCServer::GetPrimaryHandle()
 {
-    ::BaseType(pBoolean, pByte, pChar, pDouble, pFloat, pHyper, pInt, pInt3264, pLong, pShort, pSmall, pWchar_t);
+    return primaryHandle;
 }
 
-void RPCServer::Shutdown(void)
+void **RPCServer::GetSecondaryHandle()
 {
-    ::Shutdown();
+    return secondaryHandle;
+}
+
+bool RPCServer::MakeSpn(SpnParam *spnParam)
+{
+    bool result = false;
+    if (spnParam)
+    {
+        if (!DsMakeSpn(spnParam->serviceClass,
+            spnParam->serviceName,
+            spnParam->instanceName,
+            spnParam->instancePort,
+            spnParam->referrer,
+            &(spnParam->spnLength),
+            spnParam->spn))
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool RPCServer::RegisterAuthInfo(AuthInfoParam *authInfoParam)
+{
+    bool result = false;
+    if (authInfoParam)
+    {
+        if (!RpcServerRegisterAuthInfo(
+            reinterpret_cast<unsigned char*>(authInfoParam->spn),
+            authInfoParam->authService,
+            RPC_AUTH_KEY_RETRIEVAL_FN(authInfoParam->getKeyCallback),
+            authInfoParam->getKeyCallbackArg))
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool RPCServer::UseProtseqEp(ProtocalSeqParam *protSeqParam)
+{
+    bool result = false;
+
+    if (protSeqParam)
+    {
+        if (!RpcServerUseProtseqEp(protSeqParam->protseq,
+            protSeqParam->maxCalls,
+            protSeqParam->endpoint,
+            protSeqParam->securityDescriptor))
+        {
+            result = true;
+        }
+    }
+    return result;
+}
+
+bool RPCServer::Listen(ListenParam *listenParam)
+{
+    bool result = false;
+
+    if (listenParam)
+    {
+        if (!RpcServerListen(listenParam->minimumCallThreads,
+            listenParam->maxCalls,
+            listenParam->dontWait))
+        {
+            result = false;
+        }
+    }
+    return result;
 }

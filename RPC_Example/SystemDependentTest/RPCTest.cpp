@@ -110,8 +110,42 @@ namespace SystemDependentTest
         }
         TEST_METHOD_INITIALIZE(TestMethodInitialize)
         {
-            server.InitRPCServer();
-            client.InitRPCClient();
+            char spn[1000];
+            SpnParam spnParam;
+            spnParam.serviceClass = "ldap";
+            spnParam.serviceName = "DESKTOP-RUHDU7N";
+            spnParam.spnLength = 1000;
+            spnParam.spn = spn;
+
+            AuthInfoParam serverAuthInfoParam;
+            serverAuthInfoParam.spn = reinterpret_cast<unsigned char *>(spn);
+            serverAuthInfoParam.authService = RPC_C_AUTHN_GSS_NEGOTIATE;
+
+            ProtocalSeqParam protSeqParam;
+            protSeqParam.protseq = reinterpret_cast<unsigned char *>("ncacn_np");
+            protSeqParam.maxCalls = RPC_C_LISTEN_MAX_CALLS_DEFAULT;
+            protSeqParam.endpoint = reinterpret_cast<unsigned char *>("\\pipe\\hello");
+
+            InterfaceParam ifParam;
+            ifParam.interfaceHandle = server.GetPrimaryHandle();
+
+            ListenParam listenParam;
+            listenParam.maxCalls = RPC_C_LISTEN_MAX_CALLS_DEFAULT;
+            listenParam.dontWait = TRUE;
+
+            server.InitRPCServer(&spnParam, &serverAuthInfoParam, &protSeqParam, &ifParam, &listenParam);
+
+            ClientBindingParam bindingParam;
+            bindingParam.protSeq = reinterpret_cast<unsigned char*>("ncacn_np");
+            bindingParam.endpoint = reinterpret_cast<unsigned char*>("\\pipe\\hello");
+
+            ClientAuthInfoParam clientAuthInfoParam;
+            clientAuthInfoParam.spn = reinterpret_cast<unsigned char*>(spnParam.spn);
+            clientAuthInfoParam.binding = client.GetPrimaryHandle();
+            clientAuthInfoParam.authnLevel = RPC_C_AUTHN_LEVEL_PKT_INTEGRITY;
+            clientAuthInfoParam.authnService = RPC_C_AUTHN_GSS_NEGOTIATE;
+            clientAuthInfoParam.authzService = RPC_C_AUTHZ_NAME;
+            client.InitRPCClient(&bindingParam, &spnParam, &clientAuthInfoParam);
         }
         TEST_METHOD_CLEANUP(TestMethodCleanUp)
         {
@@ -382,6 +416,11 @@ namespace SystemDependentTest
 
         TEST_METHOD(TwoInterfaceTest)
         {
+            std::list<InterfaceParam> ifParams;
+            InterfaceParam ifParam;
+            ifParam.interfaceHandle = server.GetSecondaryHandle();
+            ifParams.push_back(ifParam);
+            server.RegisterInterfaces(ifParams);
             time_t timeData;
             client.GetTime(reinterpret_cast<long long *>(&timeData));
 

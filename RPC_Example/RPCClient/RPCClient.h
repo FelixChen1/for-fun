@@ -1,6 +1,7 @@
 #pragma once
 #include "..\global.h"
 #include "..\RPCInterface\hello.h"
+#include "..\spn.h"
 
 class RPC_API RPCClient
 {
@@ -8,7 +9,9 @@ public:
     RPCClient();
     ~RPCClient();
 
-    void InitRPCClient();
+    void InitRPCClient(ClientBindingParam *bindingParam, SpnParam *spnParam, ClientAuthInfoParam* authInfoParam);
+
+    void **GetPrimaryHandle();
 
     void HelloProc(unsigned char * pszString);
     bool BaseType(boolean *pBoolean,
@@ -49,12 +52,9 @@ public:
     short RemoteRead(PCONTEXT_HANDLE_TYPE phContext, unsigned char achBuf[], short *pcbBuf);
     void RemoteClose(PPCONTEXT_HANDLE_TYPE pphContext);
 private:
-    unsigned char * pszUuid;
-    unsigned char * pszProtocolSequence;
-    unsigned char * pszNetworkAddress;
-    unsigned char * pszEndpoint;
-    unsigned char * pszOptions;
-    unsigned char * pszStringBinding;
+    void **primaryHandle;
+    bool MakeSpn(SpnParam *spnParam);
+    bool SetAuthInfo(ClientAuthInfoParam *authInfoParam);
     bool bInitialized;
 };
 
