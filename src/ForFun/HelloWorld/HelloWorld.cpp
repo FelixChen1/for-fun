@@ -6,6 +6,7 @@
 
 using namespace std;
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	cout << "Hello world!SL120" << endl;
