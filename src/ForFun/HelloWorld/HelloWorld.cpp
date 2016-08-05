@@ -8,7 +8,7 @@ using namespace std;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	cout << "Hello world!SL1234dds" << endl;
+	cout << "Hello world!SL123dd4dds" << endl;
 	return 0;
 }
 
