@@ -1,11 +1,4 @@
-hello abc
-hello b
-<<<<<<< HEAD
-hello c
 
-kkkkk
-=======
-hello c
 >>>>>>> e80df5866139cb2b77fb128561
 
 
@@ -13,3 +6,6 @@ hello c
 nothing serious!
 
 8888
+
+what the hell?
+can you tell me ?
