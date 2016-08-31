@@ -16,5 +16,9 @@ git merge
 git checkout sy-master
 git merge --squash master
 
+<<<<<<< HEAD
 what’ up?man
+=======
+
 plus something
+>>>>>>> c3373e056a21d5fe08beb88f59755148e85d0da9
