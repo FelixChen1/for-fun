@@ -1,0 +1,7 @@
+hello a
+<<<<<<< HEAD
+hello b
+=======
+hello b
+hello c
+>>>>>>> sy1-master
