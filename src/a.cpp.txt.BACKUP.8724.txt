@@ -1,7 +1,0 @@
-hello a
-<<<<<<< HEAD
-hello b
-hello c
-=======
-hello b
->>>>>>> sy-master
